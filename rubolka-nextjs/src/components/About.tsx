@@ -1,4 +1,4 @@
-import Image from 'next/image'
+// import Image from 'next/image' // Закомментировано, пока не используется
 
 export default function About() {
   return (

@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     // Создаем директорию если её нет
     try {
       await mkdir(uploadDir, { recursive: true })
-    } catch (error) {
+    } catch {
       // Директория уже существует
     }
 

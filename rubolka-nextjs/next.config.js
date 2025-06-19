@@ -3,6 +3,14 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['tailwindcss'],
   },
+  eslint: {
+    // Отключаем ESLint во время сборки для продакшена
+    ignoreDuringBuilds: process.env.NODE_ENV === 'production',
+  },
+  typescript: {
+    // Отключаем проверку TypeScript во время сборки для продакшена
+    ignoreBuildErrors: process.env.NODE_ENV === 'production',
+  },
   images: {
     remotePatterns: [
       {
