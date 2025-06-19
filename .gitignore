@@ -39,7 +39,7 @@ build/
 *.temp
 .cache/
 
-# Large video files (too big for GitHub)
-rubolka-nextjs/public/assets/catalog/video_1.mp4
-rubolka-nextjs/public/assets/catalog/video_2.mp4
-rubolka-nextjs/public/assets/catalog/video_3.mp4
+# Large video files now handled by Git LFS
+# rubolka-nextjs/public/assets/catalog/video_1.mp4
+# rubolka-nextjs/public/assets/catalog/video_2.mp4
+# rubolka-nextjs/public/assets/catalog/video_3.mp4
