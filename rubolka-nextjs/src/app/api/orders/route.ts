@@ -1,29 +1,51 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { MockStorage, isDatabaseAvailable } from '@/lib/mock-data'
 
 export async function GET() {
   try {
-    const orders = await prisma.order.findMany({
-      include: {
-        items: true
-      },
-      orderBy: { createdAt: 'desc' }
-    })
+    // Проверяем доступность базы данных
+    const dbAvailable = isDatabaseAvailable()
+    
+    if (!dbAvailable) {
+      console.log('🔄 Using mock data for orders (database not available)')
+      return NextResponse.json({
+        success: true,
+        orders: MockStorage.getAllOrders()
+      })
+    }
 
-    // Преобразуем суммы из копеек в рубли
-    const formattedOrders = orders.map((order: any) => ({
-      ...order,
-      totalAmount: order.totalAmount / 100,
-      items: order.items.map((item: any) => ({
-        ...item,
-        price: item.price / 100
+    try {
+      const orders = await prisma.order.findMany({
+        include: {
+          items: true
+        },
+        orderBy: { createdAt: 'desc' }
+      })
+
+      // Преобразуем суммы из копеек в рубли
+      const formattedOrders = orders.map((order: any) => ({
+        ...order,
+        totalAmount: order.totalAmount / 100,
+        items: order.items.map((item: any) => ({
+          ...item,
+          price: item.price / 100
+        }))
       }))
-    }))
 
-    return NextResponse.json({
-      success: true,
-      orders: formattedOrders
-    })
+      return NextResponse.json({
+        success: true,
+        orders: formattedOrders
+      })
+    } catch (dbError) {
+      console.error('❌ Database connection failed, falling back to mock data:', dbError)
+      
+      return NextResponse.json({
+        success: true,
+        orders: MockStorage.getAllOrders(),
+        warning: 'Using mock data - database unavailable'
+      })
+    }
   } catch (error) {
     console.error('Error fetching orders:', error)
     return NextResponse.json({
@@ -36,6 +58,27 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
+    
+    // Проверяем доступность базы данных
+    const dbAvailable = isDatabaseAvailable()
+    
+    if (!dbAvailable) {
+      console.log('🔄 Mock order creation (database not available)')
+      
+      const mockOrder = MockStorage.createOrder({
+        customerName: body.customerName,
+        email: body.email,
+        phone: body.phone,
+        totalAmount: Number(body.totalAmount),
+        status: body.status || 'pending',
+        items: body.items || []
+      })
+      
+      return NextResponse.json({
+        success: true,
+        order: mockOrder
+      }, { status: 201 })
+    }
     
     // Создаем заказ с товарами
     const newOrder = await prisma.order.create({

@@ -1,30 +1,64 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { MockStorage, isDatabaseAvailable } from '@/lib/mock-data'
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const category = searchParams.get('category')
 
+    // Проверяем доступность базы данных
+    const dbAvailable = isDatabaseAvailable()
+    
+    if (!dbAvailable) {
+      console.log('🔄 Using mock data for products (database not available)')
+      let filteredProducts = MockStorage.getAllProducts()
+      
+      if (category && category !== 'all') {
+        filteredProducts = filteredProducts.filter((p: any) => p.category === category)
+      }
+      
+      return NextResponse.json({
+        success: true,
+        products: filteredProducts
+      })
+    }
+
     const where = category && category !== 'all' ? { category } : {}
 
-    const products = await prisma.product.findMany({
-      where,
-      orderBy: { createdAt: 'desc' }
-    })
+    try {
+      const products = await prisma.product.findMany({
+        where,
+        orderBy: { createdAt: 'desc' }
+      })
 
-    // Преобразуем JSON строки обратно в массивы и цены из копеек в рубли
-    const formattedProducts = products.map((product: any) => ({
-      ...product,
-      price: product.price / 100, // из копеек в рубли
-      colors: JSON.parse(product.colors),
-      sizes: JSON.parse(product.sizes)
-    }))
+      // Преобразуем JSON строки обратно в массивы и цены из копеек в рубли
+      const formattedProducts = products.map((product: any) => ({
+        ...product,
+        price: product.price / 100, // из копеек в рубли
+        colors: JSON.parse(product.colors),
+        sizes: JSON.parse(product.sizes)
+      }))
 
-    return NextResponse.json({
-      success: true,
-      products: formattedProducts
-    })
+      return NextResponse.json({
+        success: true,
+        products: formattedProducts
+      })
+    } catch (dbError) {
+      console.error('❌ Database connection failed, falling back to mock data:', dbError)
+      
+      let filteredProducts = MockStorage.getAllProducts()
+      
+      if (category && category !== 'all') {
+        filteredProducts = filteredProducts.filter((p: any) => p.category === category)
+      }
+      
+      return NextResponse.json({
+        success: true,
+        products: filteredProducts,
+        warning: 'Using mock data - database unavailable'
+      })
+    }
   } catch (error) {
     console.error('Error fetching products:', error)
     return NextResponse.json({
@@ -38,31 +72,75 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     
-    const newProduct = await prisma.product.create({
-      data: {
+    // Проверяем доступность базы данных
+    const dbAvailable = isDatabaseAvailable()
+    
+    if (!dbAvailable) {
+      console.log('🔄 Mock product creation (database not available)')
+      
+      const mockProduct = MockStorage.createProduct({
         name: body.name,
-        price: Math.round(Number(body.price) * 100), // в копейки
+        price: Number(body.price),
         category: body.category,
         description: body.description,
         image: body.image || '/assets/catalog/placeholder.svg',
-        colors: JSON.stringify(body.colors || []),
-        sizes: JSON.stringify(body.sizes || []),
+        colors: body.colors || [],
+        sizes: body.sizes || [],
         material: body.material || 'Хлопок 100%'
-      }
-    })
-
-    // Форматируем ответ
-    const formattedProduct = {
-      ...newProduct,
-      price: newProduct.price / 100,
-      colors: JSON.parse(newProduct.colors),
-      sizes: JSON.parse(newProduct.sizes)
+      })
+      
+      return NextResponse.json({
+        success: true,
+        product: mockProduct
+      }, { status: 201 })
     }
+    
+    try {
+      const newProduct = await prisma.product.create({
+        data: {
+          name: body.name,
+          price: Math.round(Number(body.price) * 100), // в копейки
+          category: body.category,
+          description: body.description,
+          image: body.image || '/assets/catalog/placeholder.svg',
+          colors: JSON.stringify(body.colors || []),
+          sizes: JSON.stringify(body.sizes || []),
+          material: body.material || 'Хлопок 100%'
+        }
+      })
 
-    return NextResponse.json({
-      success: true,
-      product: formattedProduct
-    }, { status: 201 })
+      // Форматируем ответ
+      const formattedProduct = {
+        ...newProduct,
+        price: newProduct.price / 100,
+        colors: JSON.parse(newProduct.colors),
+        sizes: JSON.parse(newProduct.sizes)
+      }
+
+      return NextResponse.json({
+        success: true,
+        product: formattedProduct
+      }, { status: 201 })
+    } catch (dbError) {
+      console.error('❌ Database creation failed, falling back to mock data:', dbError)
+      
+      const mockProduct = MockStorage.createProduct({
+        name: body.name,
+        price: Number(body.price),
+        category: body.category,
+        description: body.description,
+        image: body.image || '/assets/catalog/placeholder.svg',
+        colors: body.colors || [],
+        sizes: body.sizes || [],
+        material: body.material || 'Хлопок 100%'
+      })
+      
+      return NextResponse.json({
+        success: true,
+        product: mockProduct,
+        warning: 'Using mock data - database unavailable'
+      }, { status: 201 })
+    }
   } catch (error) {
     console.error('Product creation error:', error)
     return NextResponse.json({
@@ -76,6 +154,36 @@ export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
     const { id, ...updateData } = body
+    
+    // Проверяем доступность базы данных
+    const dbAvailable = isDatabaseAvailable()
+    
+    if (!dbAvailable) {
+      console.log('🔄 Mock product update (database not available)')
+      
+      const mockProduct = MockStorage.updateProduct(id, {
+        name: updateData.name,
+        price: Number(updateData.price),
+        category: updateData.category,
+        description: updateData.description,
+        image: updateData.image || '/assets/catalog/placeholder.svg',
+        colors: updateData.colors || [],
+        sizes: updateData.sizes || [],
+        material: updateData.material || 'Хлопок 100%'
+      })
+      
+      if (!mockProduct) {
+        return NextResponse.json({
+          success: false,
+          error: 'Товар не найден'
+        }, { status: 404 })
+      }
+      
+      return NextResponse.json({
+        success: true,
+        product: mockProduct
+      })
+    }
     
     const updatedProduct = await prisma.product.update({
       where: { id },
@@ -125,6 +233,27 @@ export async function DELETE(request: NextRequest) {
         success: false,
         error: 'ID товара не указан'
       }, { status: 400 })
+    }
+
+    // Проверяем доступность базы данных
+    const dbAvailable = isDatabaseAvailable()
+    
+    if (!dbAvailable) {
+      console.log('🔄 Mock product deletion (database not available)')
+      
+      const deleted = MockStorage.deleteProduct(productId)
+      
+      if (!deleted) {
+        return NextResponse.json({
+          success: false,
+          error: 'Товар не найден'
+        }, { status: 404 })
+      }
+      
+      return NextResponse.json({
+        success: true,
+        message: 'Товар успешно удален'
+      })
     }
 
     const deletedProduct = await prisma.product.delete({

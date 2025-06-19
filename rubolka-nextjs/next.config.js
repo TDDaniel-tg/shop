@@ -17,9 +17,14 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
     ],
-    domains: ['localhost'],
     unoptimized: process.env.NODE_ENV === 'production',
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   // Для Railway деплоя
   output: 'standalone',

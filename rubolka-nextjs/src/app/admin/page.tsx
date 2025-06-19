@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react'
 
 interface Product {
-  _id: string
+  id?: string
+  _id?: string  // для обратной совместимости
   name: string
   price: number
   category: string
@@ -16,7 +17,8 @@ interface Product {
 }
 
 interface Order {
-  _id: string
+  id?: string
+  _id?: string  // для обратной совместимости
   customerName: string
   email: string
   phone: string
@@ -60,6 +62,7 @@ export default function AdminPage() {
     username: '',
     password: ''
   })
+  const [showPassword, setShowPassword] = useState(false)
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -97,10 +100,20 @@ export default function AdminPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    console.log('Login attempt:', {
+      username: loginData.username,
+      password: loginData.password,
+      usernameMatch: loginData.username === 'admin',
+      passwordMatch: loginData.password === 'admin123'
+    })
+    
     if (loginData.username === 'admin' && loginData.password === 'admin123') {
       setIsAuthenticated(true)
     } else {
-      alert('Неверные данные для входа')
+      alert(`Неверные данные для входа. 
+Логин: ${loginData.username} (нужен: admin)
+Пароль: ${loginData.password} (нужен: admin123)`)
     }
   }
 
@@ -168,7 +181,7 @@ export default function AdminPage() {
         response = await fetch('/api/products', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...productData, _id: editingProduct._id })
+          body: JSON.stringify({ ...productData, id: getProductId(editingProduct), _id: getProductId(editingProduct) })
         })
       } else {
         // Create new product
@@ -254,6 +267,14 @@ export default function AdminPage() {
     setShowProductModal(true)
   }
 
+  const getProductId = (product: Product): string => {
+    return product.id || product._id || ''
+  }
+
+  const getOrderId = (order: Order): string => {
+    return order.id || order._id || ''
+  }
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900">
@@ -276,13 +297,36 @@ export default function AdminPage() {
               <label className="block text-gray-300 text-sm font-bold mb-2">
                 Пароль
               </label>
-              <input
-                type="password"
-                value={loginData.password}
-                onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary placeholder-gray-400"
-                placeholder="admin123"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={loginData.password}
+                  onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+                  className="w-full px-3 py-2 pr-10 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary placeholder-gray-400"
+                  placeholder="admin123"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white"
+                >
+                  {showPassword ? (
+                    // Иконка "скрыть"
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
+                    </svg>
+                  ) : (
+                    // Иконка "показать"
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+              <p className="text-xs text-gray-400 mt-1">
+                Логин: <span className="text-green-400">admin</span> | Пароль: <span className="text-green-400">admin123</span>
+              </p>
             </div>
             <button
               type="submit"
@@ -384,7 +428,7 @@ export default function AdminPage() {
                     </thead>
                     <tbody>
                       {products.map(product => (
-                        <tr key={product._id} className="border-b border-gray-600">
+                        <tr key={getProductId(product)} className="border-b border-gray-600">
                           <td className="px-4 py-2">
                             <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-700 flex items-center justify-center">
                               {product.image ? (
@@ -410,7 +454,7 @@ export default function AdminPage() {
                               Редактировать
                             </button>
                             <button 
-                              onClick={() => handleDeleteProduct(product._id)}
+                              onClick={() => handleDeleteProduct(getProductId(product))}
                               className="text-red-400 hover:text-red-300"
                             >
                               Удалить
@@ -443,8 +487,8 @@ export default function AdminPage() {
                   </thead>
                   <tbody>
                     {orders.map(order => (
-                      <tr key={order._id} className="border-b border-gray-600">
-                        <td className="px-4 py-2 text-gray-300">#{order._id}</td>
+                      <tr key={getOrderId(order)} className="border-b border-gray-600">
+                        <td className="px-4 py-2 text-gray-300">#{getOrderId(order)}</td>
                         <td className="px-4 py-2 text-gray-300">{order.customerName}</td>
                         <td className="px-4 py-2 text-gray-300">{order.totalAmount.toLocaleString()} ₽</td>
                         <td className="px-4 py-2">
