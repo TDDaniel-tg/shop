@@ -5,8 +5,7 @@ import { useState } from 'react'
 export default function Hero() {
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
-    email: ''
+    phone: ''
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,7 +27,7 @@ export default function Hero() {
 
       if (result.success) {
         alert('Спасибо! Мы отправим вам каталог в ближайшее время.')
-        setFormData({ name: '', phone: '', email: '' })
+        setFormData({ name: '', phone: '' })
       } else {
         alert(result.error || 'Произошла ошибка')
       }
@@ -79,27 +78,24 @@ export default function Hero() {
                 <input 
                   type="tel" 
                   name="phone" 
-                  placeholder="Телефон" 
+                  placeholder="+7 (999) 123-45-67" 
                   required
                   value={formData.phone}
                   onChange={handleChange}
+                  pattern="[\+]?[7-8]?[\(\s]?[0-9]{3}[\)\s]?[0-9]{3}[\-\s]?[0-9]{2}[\-\s]?[0-9]{2}"
+                  title="Введите номер в формате: +7 (999) 123-45-67"
                   className="w-full px-4 py-3 input-dark rounded-lg focus:outline-none focus:ring-2"
                 />
-                <input 
-                  type="email" 
-                  name="email" 
-                  placeholder="Email" 
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 input-dark rounded-lg focus:outline-none focus:ring-2"
-                />
+
                 <button 
                   type="submit" 
-                  className="w-full bg-primary text-black font-bold py-4 px-6 rounded-lg hover:bg-yellow-400 transition-colors text-lg"
+                  className="w-full bg-primary text-black font-bold py-4 px-6 rounded-lg hover:bg-yellow-400 transition-colors text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
                 >
-                  ПОЛУЧИТЬ КАТАЛОГ С ЦЕНАМИ
+                  📱 ПОЛУЧИТЬ КАТАЛОГ С ЦЕНАМИ
                 </button>
+                <p className="text-xs text-gray-400 mt-2 text-center">
+                  Менеджер свяжется с вами в течение 30 минут
+                </p>
               </div>
             </form>
           </div>

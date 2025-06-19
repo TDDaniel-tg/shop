@@ -6,7 +6,6 @@ export default function Contacts() {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
-    email: '',
     message: ''
   })
 
@@ -26,7 +25,7 @@ export default function Contacts() {
 
       if (result.success) {
         alert('Спасибо! Ваше сообщение отправлено.')
-        setFormData({ name: '', phone: '', email: '', message: '' })
+        setFormData({ name: '', phone: '', message: '' })
       } else {
         alert(result.error || 'Произошла ошибка')
       }
@@ -122,25 +121,17 @@ export default function Contacts() {
                 <input
                   type="tel"
                   name="phone"
-                  placeholder="Телефон"
+                  placeholder="+7 (999) 123-45-67"
                   required
                   value={formData.phone}
                   onChange={handleChange}
+                  pattern="[\+]?[7-8]?[\(\s]?[0-9]{3}[\)\s]?[0-9]{3}[\-\s]?[0-9]{2}[\-\s]?[0-9]{2}"
+                  title="Введите номер в формате: +7 (999) 123-45-67"
                   className="w-full px-4 py-3 input-dark rounded-lg focus:outline-none focus:ring-2"
                 />
               </div>
               
-              <div>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 input-dark rounded-lg focus:outline-none focus:ring-2"
-                />
-              </div>
+
               
               <div>
                 <textarea
@@ -155,10 +146,13 @@ export default function Contacts() {
               
               <button
                 type="submit"
-                className="w-full bg-primary text-black font-bold py-4 px-6 rounded-lg hover:bg-yellow-400 transition-colors text-lg"
+                className="w-full bg-primary text-black font-bold py-4 px-6 rounded-lg hover:bg-yellow-400 transition-colors text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
               >
-                Отправить заявку
+                🚀 Отправить заявку
               </button>
+              <p className="text-xs text-gray-400 mt-2 text-center">
+                Ответим в течение 1 часа в рабочее время
+              </p>
             </form>
           </div>
         </div>
