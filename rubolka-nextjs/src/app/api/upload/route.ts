@@ -37,8 +37,8 @@ export async function POST(request: NextRequest) {
     const fileExtension = path.extname(file.name)
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}${fileExtension}`
     
-    // Путь для сохранения
-    const uploadDir = path.join(process.cwd(), 'uploads', 'products')
+    // Путь для сохранения (в public для статических файлов)
+    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'products')
     const filePath = path.join(uploadDir, fileName)
 
     // Создаем директорию если её нет
