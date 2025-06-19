@@ -1,0 +1,14 @@
+[variables]
+NODE_ENV = "production"
+
+[phases.setup]
+nixPkgs = ["nodejs-18_x"]
+
+[phases.install]
+cmds = ["cd rubolka-nextjs && npm ci"]
+
+[phases.build]
+cmds = ["cd rubolka-nextjs && npm run build"]
+
+[start]
+cmd = "cd rubolka-nextjs && npm start" 

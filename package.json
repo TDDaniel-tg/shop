@@ -1,0 +1,24 @@
+{
+  "name": "rubolka-shop",
+  "version": "1.0.0",
+  "description": "RUBOLKA - интернет-магазин оптовой продажи футболок",
+  "scripts": {
+    "build": "cd rubolka-nextjs && npm install && npm run build",
+    "start": "cd rubolka-nextjs && npm run db:deploy && npm start",
+    "dev": "cd rubolka-nextjs && npm run dev",
+    "postinstall": "cd rubolka-nextjs && npm install"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "keywords": [
+    "ecommerce",
+    "b2b",
+    "wholesale",
+    "tshirts",
+    "nextjs"
+  ],
+  "author": "RUBOLKA",
+  "license": "ISC"
+}
