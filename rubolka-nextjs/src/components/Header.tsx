@@ -12,7 +12,7 @@ export default function Header() {
       <div className="container">
         <div className="flex items-center justify-between py-4">
           <Link href="/" className="logo flex items-center gap-2">
-            <Image src="/assets/logo.svg" alt="RUBOLKA" width={40} height={40} className="logo__img" />
+            <Image src="/assets/logo.jpg" alt="RUBOLKA" width={40} height={40} className="logo__img" />
             <span className="logo__text text-xl font-bold text-white">RUBOLKA</span>
           </Link>
           
