@@ -48,8 +48,13 @@ export default function AdminPage() {
     description: '',
     material: 'Хлопок 100%',
     colors: '',
-    sizes: ''
+    sizes: '',
+    image: ''
   })
+
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string>('')
+  const [uploading, setUploading] = useState(false)
 
   const [loginData, setLoginData] = useState({
     username: '',
@@ -99,11 +104,52 @@ export default function AdminPage() {
     }
   }
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setSelectedFile(file)
+      
+      // Создаем превью изображения
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const uploadImage = async (): Promise<string> => {
+    if (!selectedFile) return productForm.image
+
+    const formData = new FormData()
+    formData.append('file', selectedFile)
+
+    const response = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData
+    })
+
+    const result = await response.json()
+    if (result.success) {
+      return result.filePath
+    } else {
+      throw new Error(result.error || 'Ошибка загрузки изображения')
+    }
+  }
+
   const handleProductSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
+      setUploading(true)
+      
       const colorsArray = productForm.colors.split(',').map(c => c.trim()).filter(c => c)
       const sizesArray = productForm.sizes.split(',').map(s => s.trim()).filter(s => s)
+
+      // Загружаем изображение если оно выбрано
+      let imagePath = productForm.image
+      if (selectedFile) {
+        imagePath = await uploadImage()
+      }
 
       const productData = {
         name: productForm.name,
@@ -112,7 +158,8 @@ export default function AdminPage() {
         description: productForm.description,
         material: productForm.material,
         colors: colorsArray,
-        sizes: sizesArray
+        sizes: sizesArray,
+        image: imagePath
       }
 
       let response
@@ -143,7 +190,9 @@ export default function AdminPage() {
       }
     } catch (error) {
       console.error('Error saving product:', error)
-      alert('Ошибка при сохранении товара')
+      alert(error instanceof Error ? error.message : 'Ошибка при сохранении товара')
+    } finally {
+      setUploading(false)
     }
   }
 
@@ -176,8 +225,11 @@ export default function AdminPage() {
       description: product.description,
       material: product.material,
       colors: product.colors.join(', '),
-      sizes: product.sizes.join(', ')
+      sizes: product.sizes.join(', '),
+      image: product.image || ''
     })
+    setImagePreview(product.image || '')
+    setSelectedFile(null)
     setShowProductModal(true)
   }
 
@@ -189,9 +241,12 @@ export default function AdminPage() {
       description: '',
       material: 'Хлопок 100%',
       colors: '',
-      sizes: ''
+      sizes: '',
+      image: ''
     })
     setEditingProduct(null)
+    setSelectedFile(null)
+    setImagePreview('')
   }
 
   const handleAddProduct = () => {
@@ -319,6 +374,7 @@ export default function AdminPage() {
                   <table className="w-full table-auto">
                     <thead>
                       <tr className="bg-gray-700">
+                        <th className="px-4 py-2 text-left text-gray-300">Изображение</th>
                         <th className="px-4 py-2 text-left text-gray-300">Название</th>
                         <th className="px-4 py-2 text-left text-gray-300">Категория</th>
                         <th className="px-4 py-2 text-left text-gray-300">Цена</th>
@@ -329,6 +385,19 @@ export default function AdminPage() {
                     <tbody>
                       {products.map(product => (
                         <tr key={product._id} className="border-b border-gray-600">
+                          <td className="px-4 py-2">
+                            <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-700 flex items-center justify-center">
+                              {product.image ? (
+                                <img
+                                  src={product.image}
+                                  alt={product.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <span className="text-gray-400 text-xs">Нет фото</span>
+                              )}
+                            </div>
+                          </td>
                           <td className="px-4 py-2 text-gray-300">{product.name}</td>
                           <td className="px-4 py-2 text-gray-300">{product.category}</td>
                           <td className="px-4 py-2 text-gray-300">{product.price} ₽</td>
@@ -511,6 +580,32 @@ export default function AdminPage() {
 
               <div>
                 <label className="block text-gray-300 text-sm font-bold mb-2">
+                  Изображение товара
+                </label>
+                <div className="space-y-4">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileSelect}
+                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-black hover:file:bg-yellow-400"
+                  />
+                  {imagePreview && (
+                    <div className="relative w-32 h-32 border border-gray-600 rounded-lg overflow-hidden">
+                      <img
+                        src={imagePreview}
+                        alt="Превью"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                  <p className="text-sm text-gray-400">
+                    Поддерживаемые форматы: JPG, PNG, GIF, WebP. Максимальный размер: 5MB
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-gray-300 text-sm font-bold mb-2">
                   Описание
                 </label>
                 <textarea
@@ -552,9 +647,17 @@ export default function AdminPage() {
               <div className="flex gap-4 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 bg-primary text-black font-bold py-3 px-4 rounded-lg hover:bg-yellow-400 transition-colors"
+                  disabled={uploading}
+                  className="flex-1 bg-primary text-black font-bold py-3 px-4 rounded-lg hover:bg-yellow-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 >
-                  {editingProduct ? 'Обновить товар' : 'Добавить товар'}
+                  {uploading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin mr-2"></div>
+                      Загрузка...
+                    </>
+                  ) : (
+                    editingProduct ? 'Обновить товар' : 'Добавить товар'
+                  )}
                 </button>
                 <button
                   type="button"

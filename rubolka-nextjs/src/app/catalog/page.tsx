@@ -137,7 +137,7 @@ function CatalogContent() {
               <div key={product._id} className="card overflow-hidden hover:border-primary/50 transition-colors">
                 <div className="relative h-64">
                   <Image
-                    src={product.image || '/assets/catalog/placeholder.jpg'}
+                    src={product.image || '/assets/catalog/placeholder.svg'}
                     alt={product.name}
                     fill
                     className="object-cover"
