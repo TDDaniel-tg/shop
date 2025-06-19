@@ -1,4 +1,4 @@
-// import Image from 'next/image' // Закомментировано, пока не используется
+import Image from 'next/image'
 
 export default function About() {
   return (
@@ -9,11 +9,6 @@ export default function About() {
             <h2 className="text-3xl lg:text-4xl font-bold mb-6 text-white">
               О нашем производстве
             </h2>
-            <p className="text-lg text-gray-300 mb-6 leading-relaxed">
-              Мы производим высококачественные футболки уже более 10 лет. 
-              Наша фабрика оснащена современным оборудованием, а команда состоит 
-              из опытных специалистов.
-            </p>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
                 <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-1">
@@ -43,24 +38,59 @@ export default function About() {
                 </div>
               </div>
             </div>
+            
+            <div className="grid grid-cols-2 gap-4 mt-8">
+              <div className="card p-6 text-center">
+                <div className="text-3xl font-bold text-primary mb-2">10+</div>
+                <p className="text-gray-400">лет опыта</p>
+              </div>
+              <div className="card p-6 text-center">
+                <div className="text-3xl font-bold text-primary mb-2">500k+</div>
+                <p className="text-gray-400">изделий в месяц</p>
+              </div>
+              <div className="card p-6 text-center">
+                <div className="text-3xl font-bold text-primary mb-2">100+</div>
+                <p className="text-gray-400">довольных клиентов</p>
+              </div>
+              <div className="card p-6 text-center">
+                <div className="text-3xl font-bold text-primary mb-2">24/7</div>
+                <p className="text-gray-400">поддержка</p>
+              </div>
+            </div>
           </div>
           
-          <div className="grid grid-cols-2 gap-4">
-            <div className="card p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">10+</div>
-              <p className="text-gray-400">лет опыта</p>
-            </div>
-            <div className="card p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">500k+</div>
-              <p className="text-gray-400">изделий в месяц</p>
-            </div>
-            <div className="card p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">1000+</div>
-              <p className="text-gray-400">довольных клиентов</p>
-            </div>
-            <div className="card p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">24/7</div>
-              <p className="text-gray-400">поддержка</p>
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 gap-4">
+              <div className="relative overflow-hidden rounded-lg">
+                <Image
+                  src="/assets/about/production_1.jpg"
+                  alt="Производственный цех"
+                  width={600}
+                  height={300}
+                  className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="relative overflow-hidden rounded-lg">
+                  <Image
+                    src="/assets/about/production_2.jpg"
+                    alt="Швейное оборудование"
+                    width={300}
+                    height={200}
+                    className="w-full h-32 object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="relative overflow-hidden rounded-lg">
+                  <Image
+                    src="/assets/about/production_3.jpg"
+                    alt="Готовая продукция"
+                    width={300}
+                    height={200}
+                    className="w-full h-32 object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>

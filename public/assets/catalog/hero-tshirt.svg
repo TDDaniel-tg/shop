@@ -1,0 +1,59 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Фон с градиентом -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e2e8f0;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="tshirtGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f8fafc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e2e8f0;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.1)"/>
+    </filter>
+  </defs>
+  
+  <!-- Фон -->
+  <rect width="400" height="400" fill="url(#bgGradient)"/>
+  
+  <!-- Футболка -->
+  <g transform="translate(200,200)">
+    <!-- Тело футболки -->
+    <path d="M -80 -60 L -80 120 L 80 120 L 80 -60 L 60 -60 L 60 -40 L 40 -40 L 40 -60 L -40 -60 L -40 -40 L -60 -40 L -60 -60 Z" 
+          fill="url(#tshirtGradient)" 
+          stroke="#d1d5db" 
+          stroke-width="1" 
+          filter="url(#shadow)"/>
+    
+    <!-- Рукава -->
+    <ellipse cx="-70" cy="-20" rx="25" ry="40" fill="url(#tshirtGradient)" stroke="#d1d5db" stroke-width="1"/>
+    <ellipse cx="70" cy="-20" rx="25" ry="40" fill="url(#tshirtGradient)" stroke="#d1d5db" stroke-width="1"/>
+    
+    <!-- Воротник -->
+    <path d="M -40 -60 Q 0 -80 40 -60 L 40 -40 Q 0 -50 -40 -40 Z" 
+          fill="none" 
+          stroke="#d1d5db" 
+          stroke-width="2"/>
+    
+    <!-- Детали и складки -->
+    <line x1="-60" y1="-30" x2="-60" y2="100" stroke="#e5e7eb" stroke-width="1" opacity="0.5"/>
+    <line x1="60" y1="-30" x2="60" y2="100" stroke="#e5e7eb" stroke-width="1" opacity="0.5"/>
+    <line x1="-70" y1="100" x2="70" y2="100" stroke="#e5e7eb" stroke-width="1" opacity="0.5"/>
+    
+    <!-- Highlights для объема -->
+    <path d="M -70 -50 Q 0 -70 70 -50" 
+          fill="none" 
+          stroke="rgba(255,255,255,0.8)" 
+          stroke-width="2"/>
+    <ellipse cx="-60" cy="-10" rx="8" ry="15" fill="rgba(255,255,255,0.3)"/>
+    <ellipse cx="60" cy="-10" rx="8" ry="15" fill="rgba(255,255,255,0.3)"/>
+  </g>
+  
+  <!-- Декоративные элементы -->
+  <circle cx="50" cy="50" r="3" fill="#fbbf24" opacity="0.3"/>
+  <circle cx="350" cy="80" r="4" fill="#fbbf24" opacity="0.2"/>
+  <circle cx="80" cy="320" r="2" fill="#fbbf24" opacity="0.4"/>
+  <circle cx="320" cy="300" r="5" fill="#fbbf24" opacity="0.2"/>
+</svg> 

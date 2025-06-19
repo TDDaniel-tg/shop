@@ -3,6 +3,9 @@ import Advantages from '@/components/Advantages'
 import VideoGallery from '@/components/VideoGallery'
 import Catalog from '@/components/Catalog'
 import About from '@/components/About'
+import WorkProcess from '@/components/WorkProcess'
+import TelegramBlock from '@/components/TelegramBlock'
+import Clients from '@/components/Clients'
 import Calculator from '@/components/Calculator'
 import Contacts from '@/components/Contacts'
 
@@ -14,6 +17,9 @@ export default function Home() {
       <VideoGallery />
       <Catalog />
       <About />
+      <WorkProcess />
+      <TelegramBlock />
+      <Clients />
       <Calculator />
       <Contacts />
       </main>
