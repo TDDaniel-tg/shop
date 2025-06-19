@@ -4,7 +4,7 @@
   "description": "RUBOLKA - интернет-магазин оптовой продажи футболок",
   "scripts": {
     "build": "cd rubolka-nextjs && npm install && npm run build",
-    "start": "cd rubolka-nextjs && npm start",
+    "start": "cd rubolka-nextjs && npm run db:deploy && npm start",
     "dev": "cd rubolka-nextjs && npm run dev",
     "postinstall": "cd rubolka-nextjs && npm install"
   },

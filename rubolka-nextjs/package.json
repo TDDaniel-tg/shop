@@ -11,6 +11,7 @@
     "railway:deploy": "npm run build && npm start",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
+    "db:deploy": "node scripts/deploy-db.js",
     "db:studio": "prisma studio",
     "init-db": "node scripts/init-db.js"
   },
