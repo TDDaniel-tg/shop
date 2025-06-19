@@ -1,24 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server'
-import connectDB from '@/lib/mongodb'
-import Product from '@/models/Product'
+import { prisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
-    await connectDB()
-    
     const { searchParams } = new URL(request.url)
     const category = searchParams.get('category')
 
-    let query = {}
-    if (category && category !== 'all') {
-      query = { category }
-    }
+    const where = category && category !== 'all' ? { category } : {}
 
-    const products = await Product.find(query).sort({ createdAt: -1 })
+    const products = await prisma.product.findMany({
+      where,
+      orderBy: { createdAt: 'desc' }
+    })
+
+    // Преобразуем JSON строки обратно в массивы и цены из копеек в рубли
+    const formattedProducts = products.map((product: any) => ({
+      ...product,
+      price: product.price / 100, // из копеек в рубли
+      colors: JSON.parse(product.colors),
+      sizes: JSON.parse(product.sizes)
+    }))
 
     return NextResponse.json({
       success: true,
-      products
+      products: formattedProducts
     })
   } catch (error) {
     console.error('Error fetching products:', error)
@@ -31,26 +36,32 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    await connectDB()
-    
     const body = await request.json()
     
-    const newProduct = new Product({
-      name: body.name,
-      price: Number(body.price),
-      category: body.category,
-      description: body.description,
-      image: body.image || '/assets/catalog/placeholder.svg',
-      colors: body.colors || [],
-      sizes: body.sizes || [],
-      material: body.material || 'Хлопок 100%'
+    const newProduct = await prisma.product.create({
+      data: {
+        name: body.name,
+        price: Math.round(Number(body.price) * 100), // в копейки
+        category: body.category,
+        description: body.description,
+        image: body.image || '/assets/catalog/placeholder.svg',
+        colors: JSON.stringify(body.colors || []),
+        sizes: JSON.stringify(body.sizes || []),
+        material: body.material || 'Хлопок 100%'
+      }
     })
 
-    const savedProduct = await newProduct.save()
+    // Форматируем ответ
+    const formattedProduct = {
+      ...newProduct,
+      price: newProduct.price / 100,
+      colors: JSON.parse(newProduct.colors),
+      sizes: JSON.parse(newProduct.sizes)
+    }
 
     return NextResponse.json({
       success: true,
-      product: savedProduct
+      product: formattedProduct
     }, { status: 201 })
   } catch (error) {
     console.error('Product creation error:', error)
@@ -63,20 +74,18 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    await connectDB()
-    
     const body = await request.json()
-    const { _id, ...updateData } = body
+    const { id, ...updateData } = body
     
-    const updatedProduct = await Product.findByIdAndUpdate(
-      _id,
-      {
+    const updatedProduct = await prisma.product.update({
+      where: { id },
+      data: {
         ...updateData,
-        price: Number(updateData.price),
-        updatedAt: new Date()
-      },
-      { new: true, runValidators: true }
-    )
+        price: Math.round(Number(updateData.price) * 100), // в копейки
+        colors: JSON.stringify(updateData.colors || []),
+        sizes: JSON.stringify(updateData.sizes || [])
+      }
+    })
 
     if (!updatedProduct) {
       return NextResponse.json({
@@ -85,9 +94,17 @@ export async function PUT(request: NextRequest) {
       }, { status: 404 })
     }
 
+    // Форматируем ответ
+    const formattedProduct = {
+      ...updatedProduct,
+      price: updatedProduct.price / 100,
+      colors: JSON.parse(updatedProduct.colors),
+      sizes: JSON.parse(updatedProduct.sizes)
+    }
+
     return NextResponse.json({
       success: true,
-      product: updatedProduct
+      product: formattedProduct
     })
   } catch (error) {
     console.error('Product update error:', error)
@@ -100,8 +117,6 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    await connectDB()
-    
     const { searchParams } = new URL(request.url)
     const productId = searchParams.get('id')
 
@@ -112,7 +127,9 @@ export async function DELETE(request: NextRequest) {
       }, { status: 400 })
     }
 
-    const deletedProduct = await Product.findByIdAndDelete(productId)
+    const deletedProduct = await prisma.product.delete({
+      where: { id: productId }
+    })
     
     if (!deletedProduct) {
       return NextResponse.json({
