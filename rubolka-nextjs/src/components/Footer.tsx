@@ -54,7 +54,7 @@ export default function Footer() {
               <a href="mailto:info@rubolka.ru" className="block hover:text-primary transition-colors">
                 info@rubolka.ru
               </a>
-                                <p>г. Москва,<br/>ул. Промышленная, 42</p>
+                                <p>г. Москва</p>
             </div>
           </div>
         </div>

@@ -95,7 +95,7 @@ export default function Contacts() {
                 </div>
                 <div>
                   <h4 className="font-semibold text-white mb-1">Адрес производства</h4>
-                  <p className="text-gray-300">г. Москва,<br/>ул. Промышленная, 42</p>
+                  <p className="text-gray-300">г. Москва</p>
                 </div>
               </div>
             </div>

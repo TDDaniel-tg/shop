@@ -5,19 +5,19 @@ import { useState } from 'react'
 export default function VideoGallery() {
   const videos = [
     {
-      src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      src: '/assets/catalog/video_1.mp4',
       poster: '/assets/catalog/placeholder.svg',
-      title: 'Обзор женской футболки'
+      title: 'Качество наших футболок'
     },
     {
-      src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+      src: '/assets/catalog/video_2.mp4',
       poster: '/assets/catalog/placeholder.svg',
       title: 'Процесс производства'
     },
     {
-      src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      src: '/assets/catalog/video_3.mp4',
       poster: '/assets/catalog/placeholder.svg',
-      title: 'Качество ткани'
+      title: 'Обзор готовой продукции'
     }
   ]
 
