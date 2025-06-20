@@ -48,9 +48,9 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4 text-white">Информация</h4>
             <ul className="space-y-2">
-              <li><Link href="/#about" className="text-gray-400 hover:text-primary transition-colors">О производстве</Link></li>
-              <li><Link href="/#calculator" className="text-gray-400 hover:text-primary transition-colors">Калькулятор</Link></li>
-              <li><Link href="/#contacts" className="text-gray-400 hover:text-primary transition-colors">Контакты</Link></li>
+              <li><a href="/#about" className="text-gray-400 hover:text-primary transition-colors cursor-pointer">О производстве</a></li>
+              <li><a href="/#calculator" className="text-gray-400 hover:text-primary transition-colors cursor-pointer">Калькулятор</a></li>
+              <li><a href="/#contacts" className="text-gray-400 hover:text-primary transition-colors cursor-pointer">Контакты</a></li>
             </ul>
           </div>
           

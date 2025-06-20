@@ -95,8 +95,8 @@ export default function Contacts() {
                     <span className="text-black text-xl">📍</span>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-white mb-1">Адрес производства</h4>
-                    <p className="text-gray-300">г. Москва</p>
+                    <h4 className="font-semibold text-white mb-1">Адрес офиса</h4>
+                    <p className="text-gray-300">г. Москва, Причальный 8к1</p>
                   </div>
                 </div>
               </div>
@@ -212,7 +212,7 @@ export default function Contacts() {
                   <p><span className="text-primary font-medium">Контактные данные:</span></p>
                   <p>Телефон: +7 937 560-64-02</p>
                   <p>Email: info@rubolka.ru</p>
-                  <p>Директор: [Фамилия И.О.]</p>
+                  <p>Директор: Догадин Никита Михайлович</p>
                 </div>
               </div>
             </div>

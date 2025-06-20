@@ -105,7 +105,7 @@ function CatalogContent() {
   }
 
   return (
-    <div className="min-h-screen bg-black pt-24 pb-16">
+    <div className="min-h-screen bg-black pt-32 pb-16">
       <div className="container">
         <h1 className="text-4xl font-bold text-center mb-12 text-white">
           Каталог продукции

@@ -23,18 +23,18 @@ export default function Header() {
           </Link>
           
           <nav className="nav hidden md:flex items-center gap-8">
-            <Link href="/#catalog" className="nav__link text-gray-300 hover:text-primary transition-colors">
+            <a href="/#catalog" className="nav__link text-gray-300 hover:text-primary transition-colors cursor-pointer">
               Каталог
-            </Link>
-            <Link href="/#about" className="nav__link text-gray-300 hover:text-primary transition-colors">
+            </a>
+            <a href="/#about" className="nav__link text-gray-300 hover:text-primary transition-colors cursor-pointer">
               О производстве
-            </Link>
-            <Link href="/#calculator" className="nav__link text-gray-300 hover:text-primary transition-colors">
+            </a>
+            <a href="/#calculator" className="nav__link text-gray-300 hover:text-primary transition-colors cursor-pointer">
               Калькулятор
-            </Link>
-            <Link href="/#contacts" className="nav__link text-gray-300 hover:text-primary transition-colors">
+            </a>
+            <a href="/#contacts" className="nav__link text-gray-300 hover:text-primary transition-colors cursor-pointer">
               Контакты
-            </Link>
+            </a>
             <Link href="/catalog" className="btn btn-primary">
               Получить каталог
             </Link>
@@ -59,34 +59,34 @@ export default function Header() {
         {isMenuOpen && (
           <nav className="nav--open md:hidden">
             <div className="flex flex-col gap-4">
-              <Link 
+              <a 
                 href="/#catalog" 
-                className="nav__link text-gray-300 hover:text-primary transition-colors"
+                className="nav__link text-gray-300 hover:text-primary transition-colors cursor-pointer"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Каталог
-              </Link>
-              <Link 
+              </a>
+              <a 
                 href="/#about" 
-                className="nav__link text-gray-300 hover:text-primary transition-colors"
+                className="nav__link text-gray-300 hover:text-primary transition-colors cursor-pointer"
                 onClick={() => setIsMenuOpen(false)}
               >
                 О производстве
-              </Link>
-              <Link 
+              </a>
+              <a 
                 href="/#calculator" 
-                className="nav__link text-gray-300 hover:text-primary transition-colors"
+                className="nav__link text-gray-300 hover:text-primary transition-colors cursor-pointer"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Калькулятор
-              </Link>
-              <Link 
+              </a>
+              <a 
                 href="/#contacts" 
-                className="nav__link text-gray-300 hover:text-primary transition-colors"
+                className="nav__link text-gray-300 hover:text-primary transition-colors cursor-pointer"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Контакты
-              </Link>
+              </a>
               <Link 
                 href="/catalog" 
                 className="btn btn-primary w-fit"

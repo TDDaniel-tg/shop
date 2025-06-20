@@ -35,7 +35,7 @@ export default function TelegramBlock() {
             
             <div className="flex flex-col sm:flex-row gap-4">
               <a 
-                href="https://t.me/Rubolka" 
+                href="https://t.me/rubolka_opt" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="bg-[#0088CC] text-white font-bold py-4 px-8 rounded-lg hover:bg-[#006699] transition-all duration-300 flex items-center justify-center gap-3 transform hover:scale-105 shadow-lg hover:shadow-xl"
@@ -54,17 +54,17 @@ export default function TelegramBlock() {
                 <div className="w-20 h-20 bg-[#0088CC] rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-white text-3xl">📢</span>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">@Rubolka</h3>
-                <p className="text-gray-400 mb-4">Официальный канал RUBOLKA</p>
+                <h3 className="text-xl font-bold text-white mb-2">@rubolka_opt</h3>
+                <p className="text-gray-400 mb-4">Официальный канал RUBOLKA OPT</p>
                 
                 {/* QR-код для Telegram канала */}
                 <div 
                   className="w-32 h-32 bg-white rounded-lg mx-auto mb-4 flex items-center justify-center border-2 border-gray-600 p-2 hover:border-[#0088CC] transition-all duration-300 hover:shadow-lg cursor-pointer group"
-                  onClick={() => window.open('https://t.me/Rubolka', '_blank')}
+                  onClick={() => window.open('https://t.me/rubolka_opt', '_blank')}
                 >
                   <img 
-                    src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://t.me/Rubolka"
-                    alt="QR-код для Telegram канала @Rubolka"
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://t.me/rubolka_opt"
+                    alt="QR-код для Telegram канала @rubolka_opt"
                     className="w-full h-full object-contain"
                     onError={(e) => {
                       // Fallback на локальный SVG QR-код
