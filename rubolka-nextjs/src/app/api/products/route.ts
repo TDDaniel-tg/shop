@@ -131,13 +131,13 @@ export async function POST(request: NextRequest) {
         image: productData.image ? `${productData.image.substring(0, 50)}... (length: ${productData.image.length})` : 'null'
       })
       
-      // Добавляем таймаут для операции с базой данных
+      // Оптимизированное создание товара с меньшим таймаутом
       const createProductWithTimeout = Promise.race([
         prisma.product.create({
           data: productData
         }),
         new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Database timeout after 30 seconds')), 30000)
+          setTimeout(() => reject(new Error('Database timeout after 10 seconds')), 10000)
         )
       ]) as Promise<any>
       

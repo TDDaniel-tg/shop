@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import QuickProductForm from '@/components/QuickProductForm'
 
 interface Product {
   id?: string
@@ -58,6 +59,7 @@ export default function AdminPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string>('')
   const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
 
   const [loginData, setLoginData] = useState({
     username: '',
@@ -121,12 +123,53 @@ export default function AdminPage() {
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      // Проверяем размер файла (максимум 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Файл слишком большой. Максимальный размер: 5MB')
+        return
+      }
+
+      // Проверяем тип файла
+      if (!file.type.startsWith('image/')) {
+        alert('Выберите файл изображения')
+        return
+      }
+
       setSelectedFile(file)
       
-      // Создаем превью изображения
+      // Создаем оптимизированное превью
       const reader = new FileReader()
       reader.onload = (e) => {
-        setImagePreview(e.target?.result as string)
+        const img = document.createElement('img')
+        img.onload = () => {
+          // Создаем canvas для сжатия изображения
+          const canvas = document.createElement('canvas')
+          const ctx = canvas.getContext('2d')
+          
+          // Устанавливаем максимальные размеры для превью
+          const maxWidth = 300
+          const maxHeight = 300
+          let { width, height } = img
+          
+          if (width > height) {
+            if (width > maxWidth) {
+              height = (height * maxWidth) / width
+              width = maxWidth
+            }
+          } else {
+            if (height > maxHeight) {
+              width = (width * maxHeight) / height
+              height = maxHeight
+            }
+          }
+          
+          canvas.width = width
+          canvas.height = height
+          
+          ctx?.drawImage(img, 0, 0, width, height)
+          setImagePreview(canvas.toDataURL('image/jpeg', 0.8))
+        }
+        img.src = e.target?.result as string
       }
       reader.readAsDataURL(file)
     }
@@ -134,88 +177,115 @@ export default function AdminPage() {
 
   const uploadImage = async (): Promise<string> => {
     if (!selectedFile) {
-      console.log('⚠️ No file selected for upload')
-      return productForm.image
+      return productForm.image || '/assets/catalog/placeholder.svg'
     }
 
-    console.log('🎯 === ADMIN UPLOAD START ===')
-    console.log('📤 Starting image upload:', {
-      fileName: selectedFile.name,
-      fileSize: selectedFile.size,
-      fileType: selectedFile.type
-    })
-
-    const formData = new FormData()
-    formData.append('file', selectedFile)
+    // Сжимаем изображение перед загрузкой
+    const compressedFile = await compressImage(selectedFile)
     
-    console.log('📝 FormData created with file')
-    console.log('📡 Sending upload request to /api/upload')
+    const formData = new FormData()
+    formData.append('file', compressedFile)
 
     try {
       const response = await fetch('/api/upload', {
         method: 'POST',
-        body: formData
+        body: formData,
+        // Увеличиваем таймаут только для загрузки изображений
+        signal: AbortSignal.timeout(10000) // 10 секунд
       })
-
-      console.log('📨 Upload response received')
-      console.log('📨 Upload response status:', response.status)
-      console.log('📨 Upload response headers:', Object.fromEntries(response.headers.entries()))
       
       if (!response.ok) {
-        console.error('❌ HTTP error:', response.status, response.statusText)
         throw new Error(`HTTP ${response.status}: ${response.statusText}`)
       }
       
       const result = await response.json()
-      console.log('📨 Upload response data:', result)
       
       if (result.success) {
-        console.log('✅ Image uploaded successfully')
-        console.log('🔗 Received image path/data:', result.filePath?.substring(0, 100) + '...')
-        console.log('✅ === ADMIN UPLOAD SUCCESS ===')
         return result.filePath
       } else {
-        console.error('❌ Upload failed with success=false:', result.error)
         throw new Error(result.error || 'Ошибка загрузки изображения')
       }
-    } catch (fetchError) {
-      console.error('❌ === ADMIN UPLOAD ERROR ===')
-      console.error('❌ Fetch error:', fetchError)
-      if (fetchError instanceof TypeError) {
-        console.error('❌ Network error - check if server is running')
-      }
-      throw new Error('Ошибка загрузки: ' + (fetchError instanceof Error ? fetchError.message : 'Unknown error'))
+    } catch (error) {
+      console.error('Ошибка загрузки изображения:', error)
+      throw error
     }
+  }
+
+  // Функция для сжатия изображения
+  const compressImage = async (file: File): Promise<File> => {
+    return new Promise((resolve) => {
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      const img = document.createElement('img')
+      
+      img.onload = () => {
+        // Максимальные размеры для оптимизации
+        const maxWidth = 800
+        const maxHeight = 600
+        let { width, height } = img
+        
+        // Пропорциональное изменение размера
+        if (width > height) {
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width
+            width = maxWidth
+          }
+        } else {
+          if (height > maxHeight) {
+            width = (width * maxHeight) / height
+            height = maxHeight
+          }
+        }
+        
+        canvas.width = width
+        canvas.height = height
+        
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height)
+          
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const compressedFile = new File([blob], file.name, {
+                type: 'image/jpeg',
+                lastModified: Date.now()
+              })
+              resolve(compressedFile)
+            } else {
+              resolve(file)
+            }
+          }, 'image/jpeg', 0.7) // 70% качество для баланса размера и качества
+        } else {
+          resolve(file)
+        }
+      }
+      
+      img.src = URL.createObjectURL(file)
+    })
   }
 
   const handleProductSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Быстрая валидация перед отправкой
+    if (!productForm.name.trim()) {
+      alert('Введите название товара')
+      return
+    }
+    if (!productForm.price || Number(productForm.price) <= 0) {
+      alert('Введите корректную цену')
+      return
+    }
+    
     try {
       setUploading(true)
       
       const colorsArray = productForm.colors.split(',').map(c => c.trim()).filter(c => c)
       const sizesArray = productForm.sizes.split(',').map(s => s.trim()).filter(s => s)
 
-      // Загружаем изображение если оно выбрано
-      let imagePath = productForm.image
-      if (selectedFile) {
-        console.log('🔄 Uploading new image...')
-        try {
-          imagePath = await uploadImage()
-          console.log('✅ Image upload completed, path:', imagePath?.substring(0, 50) + '...')
-        } catch (uploadError) {
-          console.error('❌ Image upload failed:', uploadError)
-          alert('Ошибка загрузки изображения: ' + (uploadError instanceof Error ? uploadError.message : 'Unknown error'))
-          return // Прерываем если загрузка не удалась
-        }
-      } else {
-        console.log('⚠️ No image selected, using existing or placeholder')
-        // Если нет изображения, используем placeholder
-        if (!imagePath) {
-          imagePath = '/assets/catalog/placeholder.svg'
-        }
-      }
-
+      // Параллельная загрузка изображения и подготовка данных
+      const promises: Promise<any>[] = []
+      
+      // Подготавливаем данные товара
       const productData = {
         name: productForm.name,
         price: Number(productForm.price),
@@ -224,8 +294,19 @@ export default function AdminPage() {
         material: productForm.material,
         colors: colorsArray,
         sizes: sizesArray,
-        image: imagePath
+        image: productForm.image || '/assets/catalog/placeholder.svg'
       }
+
+      // Если есть новое изображение, загружаем его
+      if (selectedFile) {
+        promises.push(uploadImage())
+      } else {
+        promises.push(Promise.resolve(productForm.image || '/assets/catalog/placeholder.svg'))
+      }
+
+      // Ждем загрузку изображения
+      const [imagePath] = await Promise.all(promises)
+      productData.image = imagePath
 
       console.log('💾 Saving product data:', { ...productData, image: productData.image?.substring(0, 50) + '...' })
 
@@ -264,10 +345,28 @@ export default function AdminPage() {
       console.log('📡 API Response data:', result)
       
       if (result.success) {
-        await fetchProducts()
+        // Оптимистичное обновление - не ждем полную перезагрузку
         setShowProductModal(false)
         resetProductForm()
-        alert(editingProduct ? 'Товар обновлен!' : 'Товар добавлен!')
+        
+        // Показываем успешное уведомление
+        const notification = document.createElement('div')
+        notification.innerHTML = `
+          <div class="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-pulse">
+            ✅ ${editingProduct ? 'Товар обновлен!' : 'Товар добавлен!'}
+          </div>
+        `
+        document.body.appendChild(notification)
+        
+        // Убираем уведомление через 3 секунды
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification)
+          }
+        }, 3000)
+        
+        // Обновляем список товаров в фоне
+        fetchProducts()
       } else {
         console.error('❌ API Error:', result.error)
         alert(result.error || 'Ошибка при сохранении товара')
@@ -336,6 +435,51 @@ export default function AdminPage() {
   const handleAddProduct = () => {
     resetProductForm()
     setShowProductModal(true)
+  }
+
+  // Быстрое добавление товара без изображения
+  const handleQuickProductSubmit = async (productData: any) => {
+    try {
+      setUploading(true)
+      
+      const response = await fetch('/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productData)
+      })
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`)
+      }
+      
+      const result = await response.json()
+      
+      if (result.success) {
+        // Быстрое уведомление
+        const notification = document.createElement('div')
+        notification.innerHTML = `
+          <div class="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+            ⚡ Товар быстро добавлен!
+          </div>
+        `
+        document.body.appendChild(notification)
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification)
+          }
+        }, 2000)
+        
+        // Обновляем список в фоне
+        fetchProducts()
+      } else {
+        throw new Error(result.error || 'Ошибка создания товара')
+      }
+    } catch (error) {
+      console.error('Quick product creation error:', error)
+      alert('Ошибка: ' + (error instanceof Error ? error.message : 'Unknown error'))
+    } finally {
+      setUploading(false)
+    }
   }
 
   const getProductId = (product: Product): string => {
@@ -489,10 +633,18 @@ export default function AdminPage() {
                 <h2 className="text-xl font-semibold text-white">Управление товарами</h2>
                 <button 
                   onClick={handleAddProduct}
-                  className="bg-primary text-black px-4 py-2 rounded-lg hover:bg-yellow-400 transition-colors"
+                  className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition-colors"
                 >
-                  Добавить товар
+                  📷 Полная форма
                 </button>
+              </div>
+              
+              {/* Быстрая форма добавления */}
+              <div className="mb-8">
+                <QuickProductForm 
+                  onSubmit={handleQuickProductSubmit}
+                  loading={uploading}
+                />
               </div>
               
               {loading ? (
@@ -801,7 +953,7 @@ export default function AdminPage() {
                   {uploading ? (
                     <>
                       <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin mr-2"></div>
-                      Загрузка...
+                      {uploadProgress > 0 ? `Загрузка ${uploadProgress}%...` : 'Обработка...'}
                     </>
                   ) : (
                     editingProduct ? 'Обновить товар' : 'Добавить товар'
