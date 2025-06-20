@@ -29,15 +29,15 @@ const nextConfig = {
   // Для Railway деплоя
   output: 'standalone',
   trailingSlash: false,
-  // Настройки для статических файлов
-  async rewrites() {
-    return [
-      {
-        source: '/uploads/:path*',
-        destination: '/api/uploads/:path*',
-      },
-    ]
-  },
+  // Настройки для статических файлов - убираем перенаправление
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/uploads/:path*',
+  //       destination: '/api/uploads/:path*',
+  //     },
+  //   ]
+  // },
 }
 
 module.exports = nextConfig 

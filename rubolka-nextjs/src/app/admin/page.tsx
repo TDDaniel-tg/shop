@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 
 interface Product {
   id?: string
@@ -441,10 +442,13 @@ export default function AdminPage() {
                           <td className="px-4 py-2">
                             <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-700 flex items-center justify-center">
                               {product.image ? (
-                                <img
+                                <Image
                                   src={product.image}
                                   alt={product.name}
+                                  width={48}
+                                  height={48}
                                   className="w-full h-full object-cover"
+                                  unoptimized
                                 />
                               ) : (
                                 <span className="text-gray-400 text-xs">Нет фото</span>
@@ -644,10 +648,13 @@ export default function AdminPage() {
                   />
                   {imagePreview && (
                     <div className="relative w-32 h-32 border border-gray-600 rounded-lg overflow-hidden">
-                      <img
+                      <Image
                         src={imagePreview}
                         alt="Превью"
+                        width={128}
+                        height={128}
                         className="w-full h-full object-cover"
+                        unoptimized
                       />
                     </div>
                   )}
