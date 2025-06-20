@@ -154,6 +154,10 @@ function CatalogContent() {
                     alt={product.name}
                     fill
                     className="object-cover"
+                    onError={(e) => {
+                      console.log('❌ Catalog image load error for:', product.image)
+                      e.currentTarget.src = '/assets/catalog/placeholder.svg'
+                    }}
                   />
                 </div>
                 

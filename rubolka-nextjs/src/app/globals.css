@@ -26,6 +26,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden; /* Отключаем горизонтальную прокрутку */
 }
 
 body {
@@ -35,6 +36,9 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; /* Отключаем горизонтальную прокрутку */
+  width: 100%;
+  max-width: 100vw; /* Ограничиваем максимальную ширину */
 }
 
 /* Preloader styles */

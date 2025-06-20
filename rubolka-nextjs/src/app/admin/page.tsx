@@ -133,20 +133,35 @@ export default function AdminPage() {
   }
 
   const uploadImage = async (): Promise<string> => {
-    if (!selectedFile) return productForm.image
+    if (!selectedFile) {
+      console.log('⚠️ No file selected for upload')
+      return productForm.image
+    }
+
+    console.log('📤 Starting image upload:', {
+      fileName: selectedFile.name,
+      fileSize: selectedFile.size,
+      fileType: selectedFile.type
+    })
 
     const formData = new FormData()
     formData.append('file', selectedFile)
 
+    console.log('📡 Sending upload request to /api/upload')
     const response = await fetch('/api/upload', {
       method: 'POST',
       body: formData
     })
 
+    console.log('📨 Upload response status:', response.status)
     const result = await response.json()
+    console.log('📨 Upload response data:', result)
+    
     if (result.success) {
+      console.log('✅ Image uploaded successfully:', result.filePath)
       return result.filePath
     } else {
+      console.error('❌ Upload failed:', result.error)
       throw new Error(result.error || 'Ошибка загрузки изображения')
     }
   }
@@ -449,6 +464,10 @@ export default function AdminPage() {
                                   height={48}
                                   className="w-full h-full object-cover"
                                   unoptimized
+                                  onError={(e) => {
+                                    console.log('❌ Image load error for:', product.image)
+                                    e.currentTarget.src = '/assets/catalog/placeholder.svg'
+                                  }}
                                 />
                               ) : (
                                 <span className="text-gray-400 text-xs">Нет фото</span>
@@ -655,6 +674,10 @@ export default function AdminPage() {
                         height={128}
                         className="w-full h-full object-cover"
                         unoptimized
+                        onError={(e) => {
+                          console.log('❌ Preview image load error for:', imagePreview)
+                          e.currentTarget.src = '/assets/catalog/placeholder.svg'
+                        }}
                       />
                     </div>
                   )}

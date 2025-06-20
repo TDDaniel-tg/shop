@@ -1,3 +1,16 @@
+'use client'
+
+import { useEffect } from 'react'
+import Image from 'next/image'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper/modules'
+
+// Import Swiper styles
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/effect-coverflow'
+
 export default function Clients() {
   const clients = [
     { name: 'Wildberries', logo: '🛒' },
@@ -10,83 +23,462 @@ export default function Clients() {
     { name: 'Decathlon', logo: '🏃' }
   ]
 
-  const testimonials = [
-    {
-      name: 'Алексей Петров',
-      company: 'ИП Петров А.А.',
-      text: 'Отличное качество футболок! Заказываем уже 3-й раз. Быстрая доставка и приятные цены.',
-      avatar: '👨'
-    },
-    {
-      name: 'Мария Сидорова', 
-      company: 'ООО "Мерч Студия"',
-      text: 'Профессиональный подход к каждому заказу. Помогли с выбором материала и дизайном.',
-      avatar: '👩'
-    },
-    {
-      name: 'Дмитрий Козлов',
-      company: 'Event Agency',
-      text: 'Сделали 500 футболок за 5 дней! Качество на высоте, все участники довольны.',
-      avatar: '👨‍💼'
+  // Создаем CSS для placeholder изображений с имитацией отзывов
+  const createReviewPlaceholder = (index: number, type: 'telegram' | 'whatsapp' | 'viber') => {
+    const colors = {
+      telegram: { bg: '#0088cc', dark: '#2b5278' },
+      whatsapp: { bg: '#075e54', dark: '#128c7e' },  
+      viber: { bg: '#665cac', dark: '#7360a5' }
     }
+    
+    const messages = [
+      'Добро утро!\nПолучил заказ - футболки🔥\nОчень качественные!\nТкань приятная\nРазмеры точные\nСпасибо за работу! 🙏',
+      'Каролина, ожидайте!\n\nСупер спасибо! Большое\nОтзыв клиента 🔥\n\nПолучили номер сегодня\nОт 1-го клиента #3',
+      'Хорошо\nА номер для отслеживания\nможно?\n\nПолучил номер сегодня\nОт 1-го клиента #3',
+      'Привет!\nВчера получила заказ\nОтличное качество 👍\nФутболки супер!\nБудем заказывать еще',
+      'Спасибо большое!\nТовар получен\nВсе идеально 💯\nКачество отличное\nРекомендую!',
+      'Заказ пришел быстро\nУпаковка аккуратная 📦\nФутболки как на фото\nОчень довольны!\nОбязательно закажем еще'
+    ]
+    
+    const color = colors[type]
+    const message = messages[index % messages.length]
+    
+    return `data:image/svg+xml,${encodeURIComponent(`
+      <svg width="300" height="480" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="grad${index}" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:${color.bg};stop-opacity:1" />
+            <stop offset="100%" style="stop-color:${color.dark};stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        
+        <!-- Фон -->
+        <rect width="300" height="480" fill="url(#grad${index})"/>
+        
+        <!-- Заголовок чата -->
+        <rect x="0" y="0" width="300" height="60" fill="rgba(0,0,0,0.2)"/>
+        <circle cx="30" cy="30" r="15" fill="rgba(255,255,255,0.3)"/>
+        <text x="55" y="25" fill="white" font-family="Arial" font-size="14" font-weight="bold">Клиент ${index + 1}</text>
+        <text x="55" y="40" fill="rgba(255,255,255,0.7)" font-family="Arial" font-size="11">онлайн</text>
+        
+        <!-- Сообщение -->
+        <rect x="20" y="80" width="260" height="320" rx="15" fill="rgba(255,255,255,0.95)"/>
+        <foreignObject x="30" y="90" width="240" height="300">
+          <div xmlns="http://www.w3.org/1999/xhtml" style="
+            font-family: Arial, sans-serif; 
+            font-size: 14px; 
+            line-height: 1.4; 
+            color: #333;
+            padding: 10px;
+            white-space: pre-line;
+          ">
+            ${message}
+          </div>
+        </foreignObject>
+        
+        <!-- Время -->
+        <text x="270" y="415" fill="rgba(255,255,255,0.8)" font-family="Arial" font-size="10" text-anchor="end">${new Date().getHours()}:${String(new Date().getMinutes()).padStart(2, '0')}</text>
+        
+        <!-- Иконки статуса -->
+        <text x="280" y="430" fill="rgba(255,255,255,0.6)" font-family="Arial" font-size="12">✓✓</text>
+      </svg>
+    `)}`
+  }
+
+  // Фотографии отзывов с fallback placeholder'ами
+  const reviewPhotos = [
+    { 
+      id: 1, 
+      src: '/assets/reviews/review-1.jpg', 
+      alt: 'Отзыв клиента 1',
+      fallback: createReviewPlaceholder(0, 'telegram')
+    },
+    { 
+      id: 2, 
+      src: '/assets/reviews/review-2.jpg', 
+      alt: 'Отзыв клиента 2',
+      fallback: createReviewPlaceholder(1, 'whatsapp')
+    },
+    { 
+      id: 3, 
+      src: '/assets/reviews/review-3.jpg', 
+      alt: 'Отзыв клиента 3',
+      fallback: createReviewPlaceholder(2, 'viber')
+    },
+    { 
+      id: 4, 
+      src: '/assets/reviews/review-4.jpg', 
+      alt: 'Отзыв клиента 4',
+      fallback: createReviewPlaceholder(3, 'telegram')
+    },
+    { 
+      id: 5, 
+      src: '/assets/reviews/review-5.jpg', 
+      alt: 'Отзыв клиента 5',
+      fallback: createReviewPlaceholder(4, 'whatsapp')
+    },
+    { 
+      id: 6, 
+      src: '/assets/reviews/review-6.jpg', 
+      alt: 'Отзыв клиента 6',
+      fallback: createReviewPlaceholder(5, 'viber')
+    },
   ]
 
   return (
-    <section className="section bg-gray-900">
-      <div className="container">
-        <h2 className="section-title text-white mb-16">
-          Нам доверяют
-        </h2>
-        
-        {/* Логотипы клиентов */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-8 mb-20">
-          {clients.map((client, index) => (
-            <div key={index} className="group">
-              <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 text-center hover:bg-gray-750 hover:border-primary/30 transition-all duration-300">
-                <div className="text-4xl mb-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                  {client.logo}
-                </div>
-                <p className="text-gray-400 group-hover:text-white transition-colors font-medium">
-                  {client.name}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+    <>
+      {/* Swiper CSS */}
+      <style jsx global>{`
+        .reviews-swiper {
+          width: 100%;
+          padding: 60px 0 !important;
+          overflow: visible !important;
+        }
 
-        {/* Отзывы */}
-        <div>
-          <h3 className="text-2xl font-bold text-center text-white mb-12">
-            Что говорят наши клиенты
-          </h3>
+        .reviews-swiper .swiper-wrapper {
+          align-items: center;
+        }
+
+        .reviews-swiper .swiper-slide {
+          width: 300px !important;
+          height: 480px !important;
+          background: linear-gradient(145deg, #1e293b, #334155);
+          border-radius: 20px;
+          border: 1px solid rgba(255, 215, 0, 0.15);
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+          transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+          overflow: hidden;
+          position: relative;
+        }
+
+        .reviews-swiper .swiper-slide::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+          opacity: 0;
+          transition: all 0.4s ease;
+          z-index: 1;
+        }
+
+        .reviews-swiper .swiper-slide:hover {
+          transform: translateY(-15px);
+          border-color: rgba(255, 215, 0, 0.3);
+          box-shadow: 0 30px 60px -10px rgba(255, 215, 0, 0.3);
+        }
+
+        .reviews-swiper .swiper-slide:hover::before {
+          opacity: 1;
+        }
+
+        .reviews-swiper .swiper-slide-active {
+          transform: scale(1.05);
+          border-color: rgba(255, 215, 0, 0.4);
+          z-index: 2;
+        }
+
+        .reviews-swiper .swiper-slide-active:hover {
+          transform: scale(1.05) translateY(-15px);
+        }
+
+        .review-image-container {
+          width: 100%;
+          height: 100%;
+          position: relative;
+          overflow: hidden;
+          border-radius: 20px;
+        }
+
+        .review-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: all 0.4s ease;
+        }
+
+        .reviews-swiper .swiper-slide:hover .review-image {
+          transform: scale(1.05);
+        }
+
+        .review-overlay {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+          padding: 20px;
+          z-index: 2;
+        }
+
+        .review-number {
+          position: absolute;
+          top: 15px;
+          right: 15px;
+          background: rgba(255, 215, 0, 0.9);
+          color: #000;
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+          font-size: 14px;
+          z-index: 3;
+        }
+
+        .reviews-navigation {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 20px;
+          margin-top: 40px;
+        }
+
+        .reviews-swiper .swiper-button-prev,
+        .reviews-swiper .swiper-button-next {
+          width: 60px !important;
+          height: 60px !important;
+          border-radius: 50%;
+          background: linear-gradient(145deg, #1e293b, #334155) !important;
+          border: 1px solid rgba(255, 215, 0, 0.2);
+          color: #ffd700 !important;
+          font-size: 18px;
+          position: relative;
+          overflow: hidden;
+          margin-top: 0 !important;
+          transition: all 0.4s ease;
+        }
+
+        .reviews-swiper .swiper-button-prev::before,
+        .reviews-swiper .swiper-button-next::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(135deg, #ffd700, #ffed4e);
+          opacity: 0;
+          transition: all 0.4s ease;
+          z-index: -1;
+        }
+
+        .reviews-swiper .swiper-button-prev:hover,
+        .reviews-swiper .swiper-button-next:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 15px 30px rgba(255, 215, 0, 0.3);
+          color: #000 !important;
+          border-color: transparent;
+        }
+
+        .reviews-swiper .swiper-button-prev:hover::before,
+        .reviews-swiper .swiper-button-next:hover::before {
+          opacity: 1;
+        }
+
+        .reviews-swiper .swiper-button-prev:after,
+        .reviews-swiper .swiper-button-next:after {
+          font-size: 18px !important;
+          font-weight: bold;
+        }
+
+        .reviews-swiper .swiper-pagination {
+          position: relative;
+          margin-top: 0;
+          display: flex;
+          justify-content: center;
+          gap: 10px;
+        }
+
+        .reviews-swiper .swiper-pagination-bullet {
+          width: 14px !important;
+          height: 14px !important;
+          background: rgba(255, 255, 255, 0.3) !important;
+          opacity: 1 !important;
+          transition: all 0.4s ease;
+          border-radius: 14px;
+          margin: 0 5px !important;
+        }
+
+        .reviews-swiper .swiper-pagination-bullet-active {
+          background: linear-gradient(135deg, #ffd700, #ffed4e) !important;
+          transform: scale(1.2);
+          width: 30px !important;
+        }
+
+        @media (max-width: 768px) {
+          .reviews-swiper .swiper-slide {
+            width: 280px !important;
+            height: 400px !important;
+          }
+
+          .reviews-swiper .swiper-button-prev,
+          .reviews-swiper .swiper-button-next {
+            width: 50px !important;
+            height: 50px !important;
+          }
+
+          .reviews-swiper .swiper-button-prev:after,
+          .reviews-swiper .swiper-button-next:after {
+            font-size: 16px !important;
+          }
+
+          .reviews-navigation {
+            gap: 15px;
+            margin-top: 30px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .reviews-swiper .swiper-slide {
+            width: 260px !important;
+            height: 380px !important;
+          }
+
+          .reviews-swiper .swiper-button-prev,
+          .reviews-swiper .swiper-button-next {
+            width: 45px !important;
+            height: 45px !important;
+          }
+
+          .reviews-swiper .swiper-button-prev:after,
+          .reviews-swiper .swiper-button-next:after {
+            font-size: 14px !important;
+          }
+        }
+      `}</style>
+
+      <section className="section bg-gray-900">
+        <div className="container">
+          <h2 className="section-title text-white mb-16">
+            Нам доверяют
+          </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-gray-800 rounded-lg border border-gray-700 p-6 hover:border-primary/30 hover:bg-gray-750 transition-all duration-300">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-xl">
-                    {testimonial.avatar}
+          {/* Логотипы клиентов */}
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-8 mb-20">
+            {clients.map((client, index) => (
+              <div key={index} className="group">
+                <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 text-center hover:bg-gray-750 hover:border-primary/30 transition-all duration-300">
+                  <div className="text-4xl mb-3 opacity-60 group-hover:opacity-100 transition-opacity">
+                    {client.logo}
                   </div>
-                  <div>
-                    <h4 className="font-bold text-white">{testimonial.name}</h4>
-                    <p className="text-sm text-gray-400">{testimonial.company}</p>
-                  </div>
-                </div>
-                
-                <p className="text-gray-300 leading-relaxed italic">
-                  "{testimonial.text}"
-                </p>
-                
-                <div className="flex mt-4">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-primary text-lg">⭐</span>
-                  ))}
+                  <p className="text-gray-400 group-hover:text-white transition-colors font-medium">
+                    {client.name}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
+
+          {/* Карусель отзывов */}
+          <div>
+            <h3 className="text-2xl font-bold text-center text-white mb-12">
+              Отзывы наших клиентов
+            </h3>
+            
+            <div className="relative">
+              {/* Swiper Container */}
+              <Swiper
+                className="reviews-swiper"
+                modules={[Navigation, Pagination, Autoplay, EffectCoverflow]}
+                effect="coverflow"
+                grabCursor={true}
+                centeredSlides={true}
+                slidesPerView="auto"
+                loop={true}
+                autoplay={{
+                  delay: 5000,
+                  disableOnInteraction: false,
+                  pauseOnMouseEnter: true,
+                }}
+                coverflowEffect={{
+                  rotate: 8,
+                  stretch: 0,
+                  depth: 150,
+                  modifier: 2,
+                  slideShadows: false,
+                }}
+                pagination={{
+                  el: '.swiper-pagination',
+                  clickable: true,
+                  dynamicBullets: true,
+                }}
+                navigation={{
+                  nextEl: '.swiper-button-next',
+                  prevEl: '.swiper-button-prev',
+                }}
+                breakpoints={{
+                  320: {
+                    slidesPerView: 1,
+                    spaceBetween: 20,
+                    coverflowEffect: {
+                      rotate: 0,
+                      stretch: 0,
+                      depth: 0,
+                      modifier: 1,
+                    }
+                  },
+                  480: {
+                    slidesPerView: 1.2,
+                    spaceBetween: 25
+                  },
+                  640: {
+                    slidesPerView: 1.5,
+                    spaceBetween: 30
+                  },
+                  768: {
+                    slidesPerView: 2,
+                    spaceBetween: 35
+                  },
+                  992: {
+                    slidesPerView: 2.5,
+                    spaceBetween: 40
+                  },
+                  1200: {
+                    slidesPerView: 3,
+                    spaceBetween: 50
+                  }
+                }}
+              >
+                {reviewPhotos.map((photo, index) => (
+                  <SwiperSlide key={photo.id}>
+                    <div className="review-number">
+                      {index + 1}
+                    </div>
+                    <div className="review-image-container">
+                      <Image
+                        src={photo.src}
+                        alt={photo.alt}
+                        fill
+                        className="review-image"
+                        onError={(e) => {
+                          // Fallback на красивый placeholder
+                          const target = e.target as HTMLImageElement
+                          target.src = photo.fallback
+                        }}
+                      />
+                      <div className="review-overlay">
+                        <div className="text-white text-sm font-medium">
+                          Отзыв клиента #{index + 1}
+                        </div>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                ))}
+                
+                {/* Navigation */}
+                <div className="swiper-button-prev"></div>
+                <div className="swiper-button-next"></div>
+                <div className="swiper-pagination"></div>
+              </Swiper>
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   )
 } 
