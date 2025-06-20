@@ -13,14 +13,44 @@ import 'swiper/css/effect-coverflow'
 
 export default function Clients() {
   const clients = [
-    { name: 'Wildberries', logo: '🛒' },
-    { name: 'Ozon', logo: '🛍️' },
-    { name: 'Яндекс.Маркет', logo: '🛒' },
-    { name: 'Avito', logo: '📱' },
-    { name: 'DNS', logo: '💻' },
-    { name: 'М.Видео', logo: '📺' },
-    { name: 'Спортмастер', logo: '⚽' },
-    { name: 'Decathlon', logo: '🏃' }
+    { 
+      name: 'Лукойл', 
+      logo: '/assets/icons/clients/lukoil.png', 
+      description: 'Нефтяная компания',
+      hasImage: true 
+    },
+    { 
+      name: 'Газпром Арена', 
+      logo: '/assets/icons/clients/gazprom-arena.png', 
+      description: 'Спортивный комплекс', 
+      case: '5000 футболок для мероприятия',
+      hasImage: true 
+    },
+    { 
+      name: 'Газпром Нефть', 
+      logo: '/assets/icons/clients/gazprom-neft.png', 
+      description: 'Нефтегазовая компания',
+      hasImage: true 
+    },
+    { 
+      name: 'Балтбет', 
+      logo: '/assets/icons/clients/baltbet.png', 
+      description: 'Букмекерская контора',
+      hasImage: true 
+    },
+    { 
+      name: 'Селлеры WB', 
+      logo: '/assets/icons/clients/wildberries.png', 
+      description: 'Сотни магазинов одежды',
+      hasImage: true 
+    },
+    { 
+      name: 'Селлеры Ozon', 
+      logo: '/assets/icons/clients/ozon.png', 
+      description: 'Предприниматели на маркетплейсах',
+      hasImage: true 
+    },
+
   ]
 
   // Создаем CSS для placeholder изображений с имитацией отзывов
@@ -468,21 +498,65 @@ export default function Clients() {
 
       <section className="section bg-gray-900">
         <div className="container">
-          <h2 className="section-title text-white mb-16">
-            Нам доверяют
-          </h2>
+          <div className="text-center mb-16">
+            <h2 className="section-title text-white mb-4">
+              Нам доверяют
+            </h2>
+            <p className="text-lg text-gray-300 max-w-4xl mx-auto">
+              Крупные корпорации, сотни магазинов одежды по всей России и предприниматели на маркетплейсах выбирают нас
+            </p>
+          </div>
           
           {/* Логотипы клиентов */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-8 mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
             {clients.map((client, index) => (
               <div key={index} className="group">
-                <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 text-center hover:bg-gray-750 hover:border-primary/30 transition-all duration-300">
-                  <div className="text-4xl mb-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                    {client.logo}
+                <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 text-center hover:bg-gray-750 hover:border-primary/30 transition-all duration-300 h-full">
+                  <div className="mb-4 opacity-80 group-hover:opacity-100 transition-opacity">
+                    {client.hasImage ? (
+                      <div className="w-16 h-16 mx-auto mb-2 relative">
+                        <Image
+                          src={client.logo}
+                          alt={`Логотип ${client.name}`}
+                          fill
+                          className="object-contain filter brightness-90 group-hover:brightness-110 transition-all"
+                          onError={(e) => {
+                            // Fallback на эмодзи если изображение не загрузилось
+                            const target = e.target as HTMLImageElement
+                            target.style.display = 'none'
+                            const fallback = target.parentNode?.querySelector('.fallback-emoji')
+                            if (fallback) {
+                              (fallback as HTMLElement).style.display = 'block'
+                            }
+                          }}
+                        />
+                                                 <div className="fallback-emoji hidden text-4xl">
+                           {index === 0 ? '⛽' : 
+                            index === 1 ? '🏟️' : 
+                            index === 2 ? '🛢️' : 
+                            index === 3 ? '🎰' : 
+                            index === 4 ? '🛒' : '🛍️'}
+                         </div>
+                      </div>
+                    ) : (
+                      <div className="text-4xl mb-3">
+                        {client.logo}
+                      </div>
+                    )}
                   </div>
-                  <p className="text-gray-400 group-hover:text-white transition-colors font-medium">
+                  <h3 className="text-gray-300 group-hover:text-white transition-colors font-bold text-lg mb-2">
                     {client.name}
+                  </h3>
+                  <p className="text-gray-500 group-hover:text-gray-300 transition-colors text-sm mb-2">
+                    {client.description}
                   </p>
+                  {client.case && (
+                    <div className="mt-3 pt-3 border-t border-gray-700">
+                      <p className="text-primary text-xs font-medium">
+                        💼 {client.case}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
