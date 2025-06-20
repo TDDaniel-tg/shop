@@ -20,7 +20,7 @@ model Product {
   price       Int      // цена в копейках (450 рублей = 45000)
   category    String   // women, men, unisex
   description String   @db.Text
-  image       String?  @default("/assets/catalog/placeholder.svg")
+  image       String?  @db.LongText  // Используем LONGTEXT для больших base64 изображений
   colors      String   @db.Text // JSON массив цветов
   sizes       String   @db.Text // JSON массив размеров
   material    String   @default("Хлопок 100%")

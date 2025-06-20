@@ -138,6 +138,7 @@ export default function AdminPage() {
       return productForm.image
     }
 
+    console.log('🎯 === ADMIN UPLOAD START ===')
     console.log('📤 Starting image upload:', {
       fileName: selectedFile.name,
       fileSize: selectedFile.size,
@@ -146,23 +147,44 @@ export default function AdminPage() {
 
     const formData = new FormData()
     formData.append('file', selectedFile)
-
-    console.log('📡 Sending upload request to /api/upload')
-    const response = await fetch('/api/upload', {
-      method: 'POST',
-      body: formData
-    })
-
-    console.log('📨 Upload response status:', response.status)
-    const result = await response.json()
-    console.log('📨 Upload response data:', result)
     
-    if (result.success) {
-      console.log('✅ Image uploaded successfully:', result.filePath)
-      return result.filePath
-    } else {
-      console.error('❌ Upload failed:', result.error)
-      throw new Error(result.error || 'Ошибка загрузки изображения')
+    console.log('📝 FormData created with file')
+    console.log('📡 Sending upload request to /api/upload')
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      })
+
+      console.log('📨 Upload response received')
+      console.log('📨 Upload response status:', response.status)
+      console.log('📨 Upload response headers:', Object.fromEntries(response.headers.entries()))
+      
+      if (!response.ok) {
+        console.error('❌ HTTP error:', response.status, response.statusText)
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+      }
+      
+      const result = await response.json()
+      console.log('📨 Upload response data:', result)
+      
+      if (result.success) {
+        console.log('✅ Image uploaded successfully')
+        console.log('🔗 Received image path/data:', result.filePath?.substring(0, 100) + '...')
+        console.log('✅ === ADMIN UPLOAD SUCCESS ===')
+        return result.filePath
+      } else {
+        console.error('❌ Upload failed with success=false:', result.error)
+        throw new Error(result.error || 'Ошибка загрузки изображения')
+      }
+    } catch (fetchError) {
+      console.error('❌ === ADMIN UPLOAD ERROR ===')
+      console.error('❌ Fetch error:', fetchError)
+      if (fetchError instanceof TypeError) {
+        console.error('❌ Network error - check if server is running')
+      }
+      throw new Error('Ошибка загрузки: ' + (fetchError instanceof Error ? fetchError.message : 'Unknown error'))
     }
   }
 
@@ -177,7 +199,21 @@ export default function AdminPage() {
       // Загружаем изображение если оно выбрано
       let imagePath = productForm.image
       if (selectedFile) {
-        imagePath = await uploadImage()
+        console.log('🔄 Uploading new image...')
+        try {
+          imagePath = await uploadImage()
+          console.log('✅ Image upload completed, path:', imagePath?.substring(0, 50) + '...')
+        } catch (uploadError) {
+          console.error('❌ Image upload failed:', uploadError)
+          alert('Ошибка загрузки изображения: ' + (uploadError instanceof Error ? uploadError.message : 'Unknown error'))
+          return // Прерываем если загрузка не удалась
+        }
+      } else {
+        console.log('⚠️ No image selected, using existing or placeholder')
+        // Если нет изображения, используем placeholder
+        if (!imagePath) {
+          imagePath = '/assets/catalog/placeholder.svg'
+        }
       }
 
       const productData = {
@@ -191,11 +227,13 @@ export default function AdminPage() {
         image: imagePath
       }
 
+      console.log('💾 Saving product data:', { ...productData, image: productData.image?.substring(0, 50) + '...' })
+
       let response
       if (editingProduct) {
         // Update existing product
         const productId = getProductId(editingProduct)
-        console.log('🔄 Updating product:', { productId, productData })
+        console.log('🔄 Updating product:', { productId })
         
         response = await fetch('/api/products', {
           method: 'PUT',
@@ -204,7 +242,7 @@ export default function AdminPage() {
         })
       } else {
         // Create new product
-        console.log('➕ Creating new product:', productData)
+        console.log('➕ Creating new product')
         
         response = await fetch('/api/products', {
           method: 'POST',
@@ -214,6 +252,14 @@ export default function AdminPage() {
       }
 
       console.log('📡 API Response status:', response.status)
+      
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error('❌ HTTP Error:', response.status, errorText)
+        alert(`Ошибка HTTP ${response.status}: ${errorText}`)
+        return
+      }
+      
       const result = await response.json()
       console.log('📡 API Response data:', result)
       
