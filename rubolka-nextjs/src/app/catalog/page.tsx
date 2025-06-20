@@ -3,6 +3,7 @@
 import { Suspense, useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
+import OrderModal from '@/components/OrderModal'
 
 interface Product {
   _id: string
@@ -23,6 +24,8 @@ function CatalogContent() {
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'all')
   const [selectedSize, setSelectedSize] = useState('all')
   const [selectedColor, setSelectedColor] = useState('all')
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   useEffect(() => {
     fetchProducts()
@@ -59,6 +62,16 @@ function CatalogContent() {
 
   const allSizes = Array.from(new Set(products.flatMap(p => p.sizes)))
   const allColors = Array.from(new Set(products.flatMap(p => p.colors)))
+
+  const handleOrderClick = (product: Product) => {
+    setSelectedProduct(product)
+    setIsOrderModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsOrderModalOpen(false)
+    setSelectedProduct(null)
+  }
 
   if (loading) {
     return (
@@ -184,7 +197,10 @@ function CatalogContent() {
                     </div>
                   </div>
                   
-                  <button className="w-full bg-primary text-black font-semibold py-3 rounded-lg hover:bg-yellow-400 transition-colors">
+                  <button 
+                    onClick={() => handleOrderClick(product)}
+                    className="w-full bg-primary text-black font-semibold py-3 rounded-lg hover:bg-yellow-400 transition-colors"
+                  >
                     Заказать
                   </button>
                 </div>
@@ -193,6 +209,13 @@ function CatalogContent() {
           </div>
         )}
       </div>
+      
+      {/* Модальное окно заказа */}
+      <OrderModal 
+        isOpen={isOrderModalOpen}
+        onClose={handleCloseModal}
+        product={selectedProduct}
+      />
     </div>
   )
 }

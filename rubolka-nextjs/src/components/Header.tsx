@@ -11,8 +11,14 @@ export default function Header() {
     <header className="fixed top-0 w-full bg-black/95 backdrop-blur-sm border-b border-gray-800 z-50">
       <div className="container">
         <div className="flex items-center justify-between py-4">
-          <Link href="/" className="logo flex items-center gap-2">
-            <Image src="/assets/logo.jpg" alt="RUBOLKA" width={40} height={40} className="logo__img" />
+          <Link href="/" className="logo flex items-center gap-3">
+            <Image 
+              src="/assets/logo.jpg" 
+              alt="RUBOLKA" 
+              width={56} 
+              height={56} 
+              className="logo__img rounded-full object-cover object-center scale-125 border-2 border-primary/30 hover:border-primary/60 transition-colors overflow-hidden" 
+            />
             <span className="logo__text text-xl font-bold text-white">RUBOLKA</span>
           </Link>
           

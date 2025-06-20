@@ -27,9 +27,6 @@ model Product {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  // Связь с заказами
-  orderItems OrderItem[]
-
   @@map("products")
 }
 
@@ -52,18 +49,16 @@ model Order {
 model OrderItem {
   id          String @id @default(cuid())
   orderId     String
-  productId   String
+  productId   String?  // делаем опциональным
   productName String
   quantity    Int
   size        String
   color       String
   price       Int    // цена за единицу в копейках
 
-  // Связи
+  // Связи - убираем обязательную связь с товаром
   order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id])
 
   @@index([orderId])
-  @@index([productId])
   @@map("order_items")
 }

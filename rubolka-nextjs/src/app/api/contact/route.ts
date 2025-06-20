@@ -7,32 +7,25 @@ const AMOCRM_API_URL = `https://${AMOCRM_SUBDOMAIN}.amocrm.ru/api/v4`
 
 // Функция отправки лида в AmoCRM
 async function sendToAmoCRM(data: { name: string; phone: string; message?: string }) {
-  if (!AMOCRM_ACCESS_TOKEN || AMOCRM_ACCESS_TOKEN === '') {
+  console.log('🔧 Проверка настроек AmoCRM:')
+  console.log('   SUBDOMAIN:', AMOCRM_SUBDOMAIN)
+  console.log('   TOKEN:', AMOCRM_ACCESS_TOKEN ? `${AMOCRM_ACCESS_TOKEN.substring(0, 10)}...` : 'НЕ УКАЗАН')
+  console.log('   API_URL:', AMOCRM_API_URL)
+  
+  if (!AMOCRM_ACCESS_TOKEN || AMOCRM_ACCESS_TOKEN === '' || AMOCRM_ACCESS_TOKEN === 'your-access-token') {
     console.log('🔄 AmoCRM не настроен, сохраняем локально')
     return { success: true, localSave: true }
   }
 
   try {
-    // Создаем лид в AmoCRM
+    // Создаем базовый лид в AmoCRM
     const leadData = {
-      name: `Заявка с сайта: ${data.name}`,
-      price: 0,
-      custom_fields_values: [
-        {
-          field_id: 'PHONE',
-          values: [{ value: data.phone }]
-        }
-      ]
+      name: `${data.name} - ${data.phone}`,
+      price: 0
     }
 
-    // Если есть сообщение, добавляем как примечание
-    if (data.message) {
-      leadData.custom_fields_values.push({
-        field_id: 'TEXTAREA',
-        values: [{ value: data.message }]
-      })
-    }
-
+    console.log('📤 Отправляем лид в AmoCRM:', JSON.stringify([leadData], null, 2))
+    
     const response = await fetch(`${AMOCRM_API_URL}/leads`, {
       method: 'POST',
       headers: {
@@ -42,14 +35,45 @@ async function sendToAmoCRM(data: { name: string; phone: string; message?: strin
       body: JSON.stringify([leadData])
     })
 
+    console.log('📥 Ответ AmoCRM - статус:', response.status, response.statusText)
+    
     const result = await response.json()
+    console.log('📥 Ответ AmoCRM - данные:', JSON.stringify(result, null, 2))
 
     if (response.ok) {
       console.log('✅ Лид успешно создан в AmoCRM:', result)
-      return { success: true, amocrm: true, leadId: result._embedded?.leads?.[0]?.id }
+      
+      const leadId = result._embedded?.leads?.[0]?.id
+      
+      // Добавляем примечание к лиду с дополнительной информацией
+      if (leadId && data.message) {
+        try {
+          const noteData = {
+            note_type: 'common',
+            params: {
+              text: `Сообщение: ${data.message}\nИсточник: Сайт RUBOLKA`
+            }
+          }
+          
+          await fetch(`${AMOCRM_API_URL}/leads/${leadId}/notes`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${AMOCRM_ACCESS_TOKEN}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify([noteData])
+          })
+          
+          console.log('📝 Примечание добавлено к лиду')
+        } catch (noteError) {
+          console.log('⚠️ Не удалось добавить примечание:', noteError)
+        }
+      }
+      
+      return { success: true, amocrm: true, leadId }
     } else {
       console.error('❌ Ошибка AmoCRM API:', result)
-      return { success: false, error: result.detail || 'Ошибка AmoCRM' }
+      return { success: false, error: result.detail || result.message || 'Ошибка AmoCRM' }
     }
   } catch (error) {
     console.error('❌ Ошибка подключения к AmoCRM:', error)

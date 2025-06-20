@@ -7,8 +7,14 @@ export default function Footer() {
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <Image src="/assets/logo.jpg" alt="RUBOLKA" width={40} height={40} />
+            <Link href="/" className="flex items-center gap-3 mb-4">
+              <Image 
+                src="/assets/logo.jpg" 
+                alt="RUBOLKA" 
+                width={48} 
+                height={48} 
+                className="rounded-full object-cover object-center scale-125 border-2 border-primary/30 hover:border-primary/60 transition-colors overflow-hidden"
+              />
               <span className="text-xl font-bold text-white">RUBOLKA</span>
             </Link>
             <p className="text-gray-400 mb-4">

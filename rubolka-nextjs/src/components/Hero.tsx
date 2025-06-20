@@ -72,7 +72,7 @@ export default function Hero() {
             <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight text-white">
               ТВОЙ ОПТОВЫЙ<br/>
               ПОСТАВЩИК<br/>
-              {/* <span className="text-6xl md:text-8xl">❤️</span> */}
+               <span className="text-6xl md:text-8xl">❤️</span> 
             </h1>
             
             <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl">

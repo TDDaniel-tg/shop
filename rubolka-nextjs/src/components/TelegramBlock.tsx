@@ -41,15 +41,6 @@ export default function TelegramBlock() {
                 <span className="text-xl">📢</span>
                 Подписаться на канал
               </a>
-              <a 
-                href="https://t.me/rubolka_opt" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="border-2 border-gray-600 text-gray-300 font-bold py-4 px-8 rounded-lg hover:bg-gray-800 hover:border-gray-500 transition-colors flex items-center justify-center gap-3"
-              >
-                <span className="text-xl">📱</span>
-                QR-код
-              </a>
             </div>
           </div>
           
