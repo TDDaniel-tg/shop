@@ -60,7 +60,17 @@ export default function Footer() {
               <a href="mailto:info@rubolka.ru" className="block hover:text-primary transition-colors">
                 info@rubolka.ru
               </a>
-                                <p>г. Москва</p>
+              <p>г. Москва</p>
+              <div className="mt-4">
+                <p className="text-sm mb-2">Мы в социальных сетях:</p>
+                <Image 
+                  src="/assets/qr-code.png" 
+                  alt="QR код для связи" 
+                  width={100} 
+                  height={100} 
+                  className="rounded-lg border border-gray-700"
+                />
+              </div>
             </div>
           </div>
         </div>

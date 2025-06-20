@@ -155,8 +155,19 @@ export async function PUT(request: NextRequest) {
     const body = await request.json()
     const { id, ...updateData } = body
     
+    console.log('🔄 PUT /api/products - Received data:', { id, updateData })
+    
+    if (!id) {
+      console.error('❌ No product ID provided')
+      return NextResponse.json({
+        success: false,
+        error: 'ID товара не указан'
+      }, { status: 400 })
+    }
+    
     // Проверяем доступность базы данных
     const dbAvailable = isDatabaseAvailable()
+    console.log('🔍 Database available:', dbAvailable)
     
     if (!dbAvailable) {
       console.log('🔄 Mock product update (database not available)')
@@ -173,49 +184,53 @@ export async function PUT(request: NextRequest) {
       })
       
       if (!mockProduct) {
+        console.error('❌ Mock product not found:', id)
         return NextResponse.json({
           success: false,
           error: 'Товар не найден'
         }, { status: 404 })
       }
       
+      console.log('✅ Mock product updated:', mockProduct)
       return NextResponse.json({
         success: true,
         product: mockProduct
       })
     }
     
-    const updatedProduct = await prisma.product.update({
-      where: { id },
-      data: {
-        ...updateData,
-        price: Math.round(Number(updateData.price) * 100), // в копейки
-        colors: JSON.stringify(updateData.colors || []),
-        sizes: JSON.stringify(updateData.sizes || [])
-      }
-    })
+    try {
+      const updatedProduct = await prisma.product.update({
+        where: { id },
+        data: {
+          ...updateData,
+          price: Math.round(Number(updateData.price) * 100), // в копейки
+          colors: JSON.stringify(updateData.colors || []),
+          sizes: JSON.stringify(updateData.sizes || [])
+        }
+      })
 
-    if (!updatedProduct) {
+      // Форматируем ответ
+      const formattedProduct = {
+        ...updatedProduct,
+        price: updatedProduct.price / 100,
+        colors: JSON.parse(updatedProduct.colors),
+        sizes: JSON.parse(updatedProduct.sizes)
+      }
+
+      console.log('✅ Database product updated:', formattedProduct)
+      return NextResponse.json({
+        success: true,
+        product: formattedProduct
+      })
+    } catch (dbError) {
+      console.error('❌ Database update failed:', dbError)
       return NextResponse.json({
         success: false,
-        error: 'Товар не найден'
-      }, { status: 404 })
+        error: 'Ошибка обновления товара в базе данных'
+      }, { status: 500 })
     }
-
-    // Форматируем ответ
-    const formattedProduct = {
-      ...updatedProduct,
-      price: updatedProduct.price / 100,
-      colors: JSON.parse(updatedProduct.colors),
-      sizes: JSON.parse(updatedProduct.sizes)
-    }
-
-    return NextResponse.json({
-      success: true,
-      product: formattedProduct
-    })
   } catch (error) {
-    console.error('Product update error:', error)
+    console.error('❌ PUT /api/products error:', error)
     return NextResponse.json({
       success: false,
       error: 'Ошибка обновления товара'

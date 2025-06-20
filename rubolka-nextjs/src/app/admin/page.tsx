@@ -178,13 +178,18 @@ export default function AdminPage() {
       let response
       if (editingProduct) {
         // Update existing product
+        const productId = getProductId(editingProduct)
+        console.log('🔄 Updating product:', { productId, productData })
+        
         response = await fetch('/api/products', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...productData, id: getProductId(editingProduct), _id: getProductId(editingProduct) })
+          body: JSON.stringify({ ...productData, id: productId })
         })
       } else {
         // Create new product
+        console.log('➕ Creating new product:', productData)
+        
         response = await fetch('/api/products', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -192,17 +197,21 @@ export default function AdminPage() {
         })
       }
 
+      console.log('📡 API Response status:', response.status)
       const result = await response.json()
+      console.log('📡 API Response data:', result)
+      
       if (result.success) {
         await fetchProducts()
         setShowProductModal(false)
         resetProductForm()
         alert(editingProduct ? 'Товар обновлен!' : 'Товар добавлен!')
       } else {
+        console.error('❌ API Error:', result.error)
         alert(result.error || 'Ошибка при сохранении товара')
       }
     } catch (error) {
-      console.error('Error saving product:', error)
+      console.error('❌ Error saving product:', error)
       alert(error instanceof Error ? error.message : 'Ошибка при сохранении товара')
     } finally {
       setUploading(false)
