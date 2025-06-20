@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
 
 export async function POST(request: NextRequest) {
   try {
@@ -47,59 +45,30 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
+    // Конвертируем файл в base64 для сохранения в БД
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
     console.log('✅ File buffer created, size:', buffer.length)
 
-    // Создаем уникальное имя файла
-    const fileExtension = path.extname(file.name)
-    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}${fileExtension}`
-    console.log('📝 Generated filename:', fileName)
+    // Создаем base64 строку с mime-type
+    const base64 = buffer.toString('base64')
+    const mimeType = file.type
+    const dataUrl = `data:${mimeType};base64,${base64}`
     
-    // Путь для сохранения (в public для статических файлов)
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'products')
-    const filePath = path.join(uploadDir, fileName)
-    console.log('📂 Current working directory:', process.cwd())
-    console.log('📂 Upload directory:', uploadDir)
-    console.log('📂 Full file path:', filePath)
+    console.log('✅ Base64 conversion completed')
+    console.log('📊 Base64 length:', base64.length)
+    console.log('📊 DataURL length:', dataUrl.length)
 
-    // Создаем директорию если её нет
-    try {
-      await mkdir(uploadDir, { recursive: true })
-      console.log('✅ Directory created/verified:', uploadDir)
-    } catch (dirError) {
-      console.log('⚠️ Directory creation error (might already exist):', dirError)
-    }
-
-    // Сохраняем файл
-    try {
-      await writeFile(filePath, buffer)
-      console.log('✅ File written successfully to:', filePath)
-      
-      // Проверяем, что файл действительно сохранился
-      const fs = require('fs')
-      if (fs.existsSync(filePath)) {
-        const stats = fs.statSync(filePath)
-        console.log('✅ File exists after save, size:', stats.size)
-      } else {
-        console.log('❌ File does not exist after save!')
-        throw new Error('File was not saved properly')
-      }
-    } catch (saveError) {
-      console.error('❌ File save error:', saveError)
-      throw saveError
-    }
-
-    // Возвращаем путь к файлу для использования в приложении
-    const publicPath = `/uploads/products/${fileName}`
-    console.log('🔗 Public path:', publicPath)
+    // Возвращаем data URL для сохранения в базе данных
+    console.log('🔗 Returning data URL for database storage')
     console.log('✅ Upload completed successfully')
 
     return NextResponse.json({
       success: true,
-      filePath: publicPath,
-      fileName: fileName,
-      fileSize: buffer.length
+      filePath: dataUrl, // Возвращаем data URL вместо пути к файлу
+      fileName: file.name,
+      fileSize: buffer.length,
+      mimeType: mimeType
     })
 
   } catch (error) {

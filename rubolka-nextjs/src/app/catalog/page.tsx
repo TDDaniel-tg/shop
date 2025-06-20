@@ -154,6 +154,7 @@ function CatalogContent() {
                     alt={product.name}
                     fill
                     className="object-cover"
+                    unoptimized={product.image?.startsWith('data:') ? true : false}
                     onError={(e) => {
                       console.log('❌ Catalog image load error for:', product.image)
                       e.currentTarget.src = '/assets/catalog/placeholder.svg'

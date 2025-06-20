@@ -667,18 +667,18 @@ export default function AdminPage() {
                   />
                   {imagePreview && (
                     <div className="relative w-32 h-32 border border-gray-600 rounded-lg overflow-hidden">
-                      <Image
-                        src={imagePreview}
-                        alt="Превью"
-                        width={128}
-                        height={128}
-                        className="w-full h-full object-cover"
-                        unoptimized
-                        onError={(e) => {
-                          console.log('❌ Preview image load error for:', imagePreview)
-                          e.currentTarget.src = '/assets/catalog/placeholder.svg'
-                        }}
-                      />
+                                              <Image
+                          src={imagePreview}
+                          alt="Превью"
+                          width={128}
+                          height={128}
+                          className="w-full h-full object-cover"
+                          unoptimized
+                          onError={(e) => {
+                            console.log('❌ Preview image load error for:', imagePreview)
+                            e.currentTarget.src = '/assets/catalog/placeholder.svg'
+                          }}
+                        />
                     </div>
                   )}
                   <p className="text-sm text-gray-400">

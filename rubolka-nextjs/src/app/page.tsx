@@ -8,6 +8,7 @@ import TelegramBlock from '@/components/TelegramBlock'
 import Clients from '@/components/Clients'
 import Calculator from '@/components/Calculator'
 import Contacts from '@/components/Contacts'
+import FloatingSocial from '@/components/FloatingSocial'
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
       <Clients />
       <Calculator />
       <Contacts />
-      </main>
+      <FloatingSocial />
+    </main>
   )
 }
