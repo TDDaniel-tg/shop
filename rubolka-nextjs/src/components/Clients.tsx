@@ -311,15 +311,31 @@ export default function Clients() {
         }
 
         @media (max-width: 768px) {
+          .reviews-swiper {
+            padding: 0 20px;
+          }
+
           .reviews-swiper .swiper-slide {
-            width: 280px !important;
-            height: 400px !important;
+            width: 85vw !important;
+            max-width: 320px !important;
+            height: 420px !important;
+            margin: 0 auto;
           }
 
           .reviews-swiper .swiper-button-prev,
           .reviews-swiper .swiper-button-next {
             width: 50px !important;
             height: 50px !important;
+            top: 50% !important;
+            margin-top: -25px !important;
+          }
+
+          .reviews-swiper .swiper-button-prev {
+            left: 10px !important;
+          }
+
+          .reviews-swiper .swiper-button-next {
+            right: 10px !important;
           }
 
           .reviews-swiper .swiper-button-prev:after,
@@ -331,12 +347,37 @@ export default function Clients() {
             gap: 15px;
             margin-top: 30px;
           }
+
+          .review-overlay {
+            padding: 15px;
+          }
+
+          .review-number {
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            font-size: 12px;
+          }
+
+          /* Улучшенная видимость навигации на мобильных */
+          .reviews-swiper .swiper-button-prev,
+          .reviews-swiper .swiper-button-next {
+            background: rgba(0, 0, 0, 0.7) !important;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+          }
         }
 
         @media (max-width: 480px) {
+          .reviews-swiper {
+            padding: 0 15px;
+          }
+
           .reviews-swiper .swiper-slide {
-            width: 260px !important;
-            height: 380px !important;
+            width: 90vw !important;
+            max-width: 280px !important;
+            height: 400px !important;
           }
 
           .reviews-swiper .swiper-button-prev,
@@ -345,9 +386,82 @@ export default function Clients() {
             height: 45px !important;
           }
 
+          .reviews-swiper .swiper-button-prev {
+            left: 5px !important;
+          }
+
+          .reviews-swiper .swiper-button-next {
+            right: 5px !important;
+          }
+
           .reviews-swiper .swiper-button-prev:after,
           .reviews-swiper .swiper-button-next:after {
             font-size: 14px !important;
+          }
+
+          .review-overlay {
+            padding: 12px;
+          }
+
+          .review-number {
+            top: 8px;
+            right: 8px;
+            width: 28px;
+            height: 28px;
+            font-size: 11px;
+          }
+        }
+
+        @media (max-width: 375px) {
+          .reviews-swiper {
+            padding: 0 10px;
+          }
+
+          .reviews-swiper .swiper-slide {
+            width: 95vw !important;
+            max-width: 260px !important;
+            height: 380px !important;
+          }
+
+          .reviews-swiper .swiper-button-prev,
+          .reviews-swiper .swiper-button-next {
+            width: 40px !important;
+            height: 40px !important;
+          }
+
+          .reviews-swiper .swiper-button-prev {
+            left: 2px !important;
+          }
+
+          .reviews-swiper .swiper-button-next {
+            right: 2px !important;
+          }
+
+          .reviews-swiper .swiper-button-prev:after,
+          .reviews-swiper .swiper-button-next:after {
+            font-size: 12px !important;
+          }
+
+          .reviews-navigation {
+            margin-top: 20px;
+          }
+        }
+
+        /* Дополнительная адаптивность для очень маленьких экранов */
+        @media (max-width: 320px) {
+          .reviews-swiper {
+            padding: 0 5px;
+          }
+
+          .reviews-swiper .swiper-slide {
+            width: 98vw !important;
+            max-width: 240px !important;
+            height: 360px !important;
+          }
+
+          h3.text-2xl {
+            font-size: 1.5rem !important;
+            margin-bottom: 1.5rem !important;
           }
         }
       `}</style>
@@ -376,11 +490,11 @@ export default function Clients() {
 
           {/* Карусель отзывов */}
           <div>
-            <h3 className="text-2xl font-bold text-center text-white mb-12">
+            <h3 className="text-2xl md:text-2xl font-bold text-center text-white mb-8 md:mb-12">
               Отзывы наших клиентов
             </h3>
             
-            <div className="relative">
+            <div className="relative px-4 md:px-0">
               {/* Swiper Container */}
               <Swiper
                 className="reviews-swiper"
@@ -388,18 +502,22 @@ export default function Clients() {
                 effect="coverflow"
                 grabCursor={true}
                 centeredSlides={true}
-                slidesPerView="auto"
+                slidesPerView={1}
                 loop={true}
+                touchRatio={1}
+                touchAngle={45}
+                simulateTouch={true}
+                allowTouchMove={true}
                 autoplay={{
                   delay: 5000,
                   disableOnInteraction: false,
                   pauseOnMouseEnter: true,
                 }}
                 coverflowEffect={{
-                  rotate: 8,
+                  rotate: 5,
                   stretch: 0,
-                  depth: 150,
-                  modifier: 2,
+                  depth: 100,
+                  modifier: 1.5,
                   slideShadows: false,
                 }}
                 pagination={{
@@ -414,33 +532,41 @@ export default function Clients() {
                 breakpoints={{
                   320: {
                     slidesPerView: 1,
-                    spaceBetween: 20,
+                    spaceBetween: 15,
+                    centeredSlides: true,
                     coverflowEffect: {
                       rotate: 0,
                       stretch: 0,
                       depth: 0,
                       modifier: 1,
-                    }
+                    },
+                    effect: 'slide'
                   },
                   480: {
-                    slidesPerView: 1.2,
-                    spaceBetween: 25
+                    slidesPerView: 1,
+                    spaceBetween: 20,
+                    centeredSlides: true,
+                    effect: 'slide'
                   },
                   640: {
-                    slidesPerView: 1.5,
-                    spaceBetween: 30
+                    slidesPerView: 1.2,
+                    spaceBetween: 25,
+                    centeredSlides: true
                   },
                   768: {
                     slidesPerView: 2,
-                    spaceBetween: 35
+                    spaceBetween: 30,
+                    centeredSlides: false
                   },
                   992: {
                     slidesPerView: 2.5,
-                    spaceBetween: 40
+                    spaceBetween: 35,
+                    centeredSlides: true
                   },
                   1200: {
                     slidesPerView: 3,
-                    spaceBetween: 50
+                    spaceBetween: 40,
+                    centeredSlides: true
                   }
                 }}
               >

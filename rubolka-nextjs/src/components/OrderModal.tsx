@@ -185,7 +185,7 @@ export default function OrderModal({ isOpen, onClose, product }: OrderModalProps
                 <span className="text-2xl">❌</span>
                 <div>
                   <p className="font-semibold">Ошибка оформления заказа</p>
-                  <p className="text-sm">Попробуйте еще раз или позвоните по телефону +7 938 878-68-80</p>
+                  <p className="text-sm">Попробуйте еще раз или позвоните по телефону +7 937 560-64-02</p>
                 </div>
               </div>
             </div>

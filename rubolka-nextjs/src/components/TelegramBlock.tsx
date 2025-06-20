@@ -33,7 +33,7 @@ export default function TelegramBlock() {
             
             <div className="flex flex-col sm:flex-row gap-4">
               <a 
-                href="https://t.me/rubolka_opt" 
+                href="https://t.me/Rubolka" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="bg-[#0088CC] text-white font-bold py-4 px-8 rounded-lg hover:bg-[#006699] transition-colors flex items-center justify-center gap-3"
@@ -50,7 +50,7 @@ export default function TelegramBlock() {
                 <div className="w-20 h-20 bg-[#0088CC] rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-white text-3xl">📢</span>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">@rubolka_opt</h3>
+                <h3 className="text-xl font-bold text-white mb-2">@Rubolka</h3>
                 <p className="text-gray-400 mb-4">Официальный канал RUBOLKA</p>
                 
                 {/* QR-код placeholder */}

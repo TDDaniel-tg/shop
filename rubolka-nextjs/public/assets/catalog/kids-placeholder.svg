@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background: linear-gradient(135deg, #1f2937, #374151);">
+  <!-- Детская футболка -->
+  <g transform="translate(200, 150)">
+    <!-- Футболка (меньшего размера) -->
+    <path d="M-40,-40 L-50,-35 L-50,-10 L-45,20 L45,20 L50,-10 L50,-35 L40,-40 
+             L35,-45 L25,-45 L20,-50 L-20,-50 L-25,-45 L-35,-45 Z" 
+          fill="#4b5563" stroke="#fbbf24" stroke-width="2"/>
+    
+    <!-- Рукава -->
+    <ellipse cx="-45" cy="-25" rx="15" ry="20" fill="#6b7280"/>
+    <ellipse cx="45" cy="-25" rx="15" ry="20" fill="#6b7280"/>
+    
+    <!-- Воротник -->
+    <ellipse cx="0" cy="-42" rx="12" ry="8" fill="#374151"/>
+    
+    <!-- Детский принт (звездочка) -->
+    <g transform="translate(0, -10)">
+      <path d="M0,-15 L4,-5 L15,-5 L7,2 L10,12 L0,6 L-10,12 L-7,2 L-15,-5 L-4,-5 Z" 
+            fill="#fbbf24" opacity="0.9"/>
+    </g>
+    
+    <!-- Улыбающееся лицо -->
+    <circle cx="-8" cy="5" r="2" fill="#fbbf24"/>
+    <circle cx="8" cy="5" r="2" fill="#fbbf24"/>
+    <path d="M-6,10 Q0,15 6,10" stroke="#fbbf24" stroke-width="2" fill="none"/>
+  </g>
+  
+  <!-- Текст -->
+  <text x="200" y="250" text-anchor="middle" fill="#fbbf24" font-family="Arial, sans-serif" font-size="22" font-weight="bold">ДЕТСКИЕ ФУТБОЛКИ</text>
+  <text x="200" y="275" text-anchor="middle" fill="#9ca3af" font-family="Arial, sans-serif" font-size="14">Качественная одежда для детей</text>
+</svg> 

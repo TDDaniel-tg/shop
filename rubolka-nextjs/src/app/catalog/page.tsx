@@ -102,6 +102,12 @@ function CatalogContent() {
                 className="w-full px-4 py-2 input-dark rounded-lg focus:outline-none focus:ring-2"
               >
                 <option value="all">Все категории</option>
+                <option value="tshirts">Футболки</option>
+                <option value="caps">Кепки</option>
+                <option value="kids">Детские футболки</option>
+                <option value="hoodies">Худи</option>
+                <option value="sweatshirts">Свитшоты</option>
+                <option value="longsleeves">Лонгсливы</option>
                 <option value="women">Женские</option>
                 <option value="men">Мужские</option>
                 <option value="unisex">Унисекс</option>

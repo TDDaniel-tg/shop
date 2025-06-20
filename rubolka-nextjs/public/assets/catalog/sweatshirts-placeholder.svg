@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background: linear-gradient(135deg, #1f2937, #374151);">
+  <!-- Свитшот -->
+  <g transform="translate(200, 150)">
+    <!-- Основная часть свитшота -->
+    <path d="M-50,-45 L-60,-40 L-60,-10 L-55,30 L55,30 L60,-10 L60,-40 L50,-45 
+             L40,-50 L25,-50 L20,-55 L-20,-55 L-25,-50 L-40,-50 Z" 
+          fill="#4b5563" stroke="#fbbf24" stroke-width="2"/>
+    
+    <!-- Рукава -->
+    <ellipse cx="-55" cy="-20" rx="18" ry="25" fill="#6b7280"/>
+    <ellipse cx="55" cy="-20" rx="18" ry="25" fill="#6b7280"/>
+    
+    <!-- Круглый воротник -->
+    <ellipse cx="0" cy="-47" rx="18" ry="8" fill="#374151"/>
+    <ellipse cx="0" cy="-50" rx="15" ry="6" fill="#6b7280"/>
+    
+    <!-- Принт на свитшоте -->
+    <g transform="translate(0, -10)">
+      <rect x="-20" y="-10" width="40" height="15" fill="#fbbf24" opacity="0.8" rx="3"/>
+      <text x="0" y="0" text-anchor="middle" fill="#000" font-family="Arial, sans-serif" font-size="8" font-weight="bold">RUBOLKA</text>
+    </g>
+    
+    <!-- Манжеты -->
+    <rect x="-58" y="8" width="12" height="6" fill="#374151"/>
+    <rect x="46" y="8" width="12" height="6" fill="#374151"/>
+    <rect x="-55" y="25" width="110" height="6" fill="#374151"/>
+    
+    <!-- Швы -->
+    <line x1="-50" y1="-20" x2="-50" y2="20" stroke="#9ca3af" stroke-width="1" opacity="0.5"/>
+    <line x1="50" y1="-20" x2="50" y2="20" stroke="#9ca3af" stroke-width="1" opacity="0.5"/>
+  </g>
+  
+  <!-- Текст -->
+  <text x="200" y="250" text-anchor="middle" fill="#fbbf24" font-family="Arial, sans-serif" font-size="24" font-weight="bold">СВИТШОТЫ</text>
+  <text x="200" y="275" text-anchor="middle" fill="#9ca3af" font-family="Arial, sans-serif" font-size="14">Стильные свитшоты для любого случая</text>
+</svg> 

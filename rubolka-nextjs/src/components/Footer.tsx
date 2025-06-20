@@ -18,7 +18,7 @@ export default function Footer() {
               <span className="text-xl font-bold text-white">RUBOLKA</span>
             </Link>
             <p className="text-gray-400 mb-4">
-              Производство качественных футболок для оптовых продаж
+              Производство качественной одежды для оптовых продаж
             </p>
             <div className="flex gap-4">
               <a href="#" className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-primary hover:text-black transition-colors">
@@ -36,9 +36,12 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4 text-white">Каталог</h4>
             <ul className="space-y-2">
-              <li><Link href="/catalog?category=women" className="text-gray-400 hover:text-primary transition-colors">Женские футболки</Link></li>
-              <li><Link href="/catalog?category=men" className="text-gray-400 hover:text-primary transition-colors">Мужские футболки</Link></li>
-              <li><Link href="/catalog?category=unisex" className="text-gray-400 hover:text-primary transition-colors">Унисекс футболки</Link></li>
+              <li><Link href="/catalog?category=tshirts" className="text-gray-400 hover:text-primary transition-colors">Футболки</Link></li>
+              <li><Link href="/catalog?category=caps" className="text-gray-400 hover:text-primary transition-colors">Кепки</Link></li>
+              <li><Link href="/catalog?category=kids" className="text-gray-400 hover:text-primary transition-colors">Детские футболки</Link></li>
+              <li><Link href="/catalog?category=hoodies" className="text-gray-400 hover:text-primary transition-colors">Худи</Link></li>
+              <li><Link href="/catalog?category=sweatshirts" className="text-gray-400 hover:text-primary transition-colors">Свитшоты</Link></li>
+              <li><Link href="/catalog?category=longsleeves" className="text-gray-400 hover:text-primary transition-colors">Лонгсливы</Link></li>
             </ul>
           </div>
           
@@ -54,8 +57,8 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4 text-white">Контакты</h4>
             <div className="space-y-3 text-gray-400">
-              <a href="tel:+79388786880" className="block hover:text-primary transition-colors">
-                +7 938 878-68-80
+              <a href="tel:+79375606402" className="block hover:text-primary transition-colors">
+                +7 937 560-64-02
               </a>
               <a href="mailto:info@rubolka.ru" className="block hover:text-primary transition-colors">
                 info@rubolka.ru

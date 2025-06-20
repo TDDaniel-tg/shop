@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background: linear-gradient(135deg, #1f2937, #374151);">
+  <!-- Худи -->
+  <g transform="translate(200, 150)">
+    <!-- Основная часть худи -->
+    <path d="M-50,-50 L-60,-45 L-60,-10 L-55,30 L55,30 L60,-10 L60,-45 L50,-50 
+             L45,-55 L30,-55 L25,-60 L-25,-60 L-30,-55 L-45,-55 Z" 
+          fill="#4b5563" stroke="#fbbf24" stroke-width="2"/>
+    
+    <!-- Рукава -->
+    <ellipse cx="-55" cy="-25" rx="18" ry="25" fill="#6b7280"/>
+    <ellipse cx="55" cy="-25" rx="18" ry="25" fill="#6b7280"/>
+    
+    <!-- Капюшон -->
+    <path d="M-25,-60 Q0,-75 25,-60 L25,-50 Q0,-40 -25,-50 Z" 
+          fill="#374151" stroke="#fbbf24" stroke-width="1"/>
+    
+    <!-- Шнурки капюшона -->
+    <circle cx="-8" cy="-45" r="3" fill="#fbbf24"/>
+    <circle cx="8" cy="-45" r="3" fill="#fbbf24"/>
+    <line x1="-8" y1="-42" x2="-8" y2="-25" stroke="#fbbf24" stroke-width="2"/>
+    <line x1="8" y1="-42" x2="8" y2="-25" stroke="#fbbf24" stroke-width="2"/>
+    
+    <!-- Карман-кенгуру -->
+    <path d="M-25,5 Q0,15 25,5 L25,15 Q0,25 -25,15 Z" 
+          fill="#374151" stroke="#6b7280" stroke-width="1"/>
+    
+    <!-- Манжеты -->
+    <rect x="-58" y="8" width="12" height="8" fill="#374151"/>
+    <rect x="46" y="8" width="12" height="8" fill="#374151"/>
+    <rect x="-55" y="25" width="110" height="8" fill="#374151"/>
+  </g>
+  
+  <!-- Текст -->
+  <text x="200" y="250" text-anchor="middle" fill="#fbbf24" font-family="Arial, sans-serif" font-size="24" font-weight="bold">ХУДИ</text>
+  <text x="200" y="275" text-anchor="middle" fill="#9ca3af" font-family="Arial, sans-serif" font-size="14">Теплые и комфортные худи</text>
+</svg> 
