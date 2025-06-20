@@ -261,96 +261,10 @@ export default function Clients() {
         }
 
         .reviews-navigation {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 20px;
-          margin-top: 40px;
+          display: none;
         }
 
-        @media (min-width: 769px) {
-          .reviews-swiper .swiper-button-prev,
-          .reviews-swiper .swiper-button-next {
-            display: none !important;
-          }
 
-          .reviews-navigation {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
-            margin-top: 40px;
-          }
-
-          .desktop-nav {
-            width: 60px !important;
-            height: 60px !important;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #1e293b, #334155) !important;
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            color: #ffd700 !important;
-            font-size: 18px;
-            position: relative !important;
-            overflow: hidden;
-            margin: 0 !important;
-            transition: all 0.4s ease;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          }
-
-          .desktop-nav::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #ffd700, #ffed4e);
-            opacity: 0;
-            transition: all 0.4s ease;
-            z-index: -1;
-          }
-
-          .desktop-nav:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.3);
-            color: #000 !important;
-            border-color: transparent;
-          }
-
-          .desktop-nav:hover::before {
-            opacity: 1;
-          }
-
-          .desktop-nav:after {
-            font-size: 18px !important;
-            font-weight: bold;
-          }
-
-          .desktop-pagination {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-          }
-
-          .desktop-pagination .swiper-pagination-bullet {
-            width: 14px !important;
-            height: 14px !important;
-            background: rgba(255, 255, 255, 0.3) !important;
-            opacity: 1 !important;
-            transition: all 0.4s ease;
-            border-radius: 14px;
-            margin: 0 5px !important;
-          }
-
-          .desktop-pagination .swiper-pagination-bullet-active {
-            background: linear-gradient(135deg, #ffd700, #ffed4e) !important;
-            transform: scale(1.2);
-            width: 30px !important;
-          }
-        }
 
         .reviews-swiper .swiper-button-prev,
         .reviews-swiper .swiper-button-next {
@@ -438,28 +352,11 @@ export default function Clients() {
 
           .reviews-swiper .swiper-button-prev,
           .reviews-swiper .swiper-button-next {
-            width: 50px !important;
-            height: 50px !important;
-            top: 50% !important;
-            margin-top: -25px !important;
-          }
-
-          .reviews-swiper .swiper-button-prev {
-            left: 10px !important;
-          }
-
-          .reviews-swiper .swiper-button-next {
-            right: 10px !important;
-          }
-
-          .reviews-swiper .swiper-button-prev:after,
-          .reviews-swiper .swiper-button-next:after {
-            font-size: 16px !important;
+            display: none !important;
           }
 
           .reviews-navigation {
-            gap: 15px;
-            margin-top: 30px;
+            display: none !important;
           }
 
           .review-overlay {
@@ -472,14 +369,6 @@ export default function Clients() {
             width: 30px;
             height: 30px;
             font-size: 12px;
-          }
-
-          /* Улучшенная видимость навигации на мобильных */
-          .reviews-swiper .swiper-button-prev,
-          .reviews-swiper .swiper-button-next {
-            background: rgba(0, 0, 0, 0.7) !important;
-            backdrop-filter: blur(10px);
-            z-index: 10;
           }
         }
 
@@ -496,21 +385,7 @@ export default function Clients() {
 
           .reviews-swiper .swiper-button-prev,
           .reviews-swiper .swiper-button-next {
-            width: 45px !important;
-            height: 45px !important;
-          }
-
-          .reviews-swiper .swiper-button-prev {
-            left: 5px !important;
-          }
-
-          .reviews-swiper .swiper-button-next {
-            right: 5px !important;
-          }
-
-          .reviews-swiper .swiper-button-prev:after,
-          .reviews-swiper .swiper-button-next:after {
-            font-size: 14px !important;
+            display: none !important;
           }
 
           .review-overlay {
@@ -539,25 +414,11 @@ export default function Clients() {
 
           .reviews-swiper .swiper-button-prev,
           .reviews-swiper .swiper-button-next {
-            width: 40px !important;
-            height: 40px !important;
-          }
-
-          .reviews-swiper .swiper-button-prev {
-            left: 2px !important;
-          }
-
-          .reviews-swiper .swiper-button-next {
-            right: 2px !important;
-          }
-
-          .reviews-swiper .swiper-button-prev:after,
-          .reviews-swiper .swiper-button-next:after {
-            font-size: 12px !important;
+            display: none !important;
           }
 
           .reviews-navigation {
-            margin-top: 20px;
+            display: none !important;
           }
         }
 
@@ -760,12 +621,7 @@ export default function Clients() {
                 <div className="swiper-pagination"></div>
               </Swiper>
 
-              {/* Desktop Navigation */}
-              <div className="reviews-navigation hidden md:flex">
-                <div className="swiper-button-prev desktop-nav"></div>
-                <div className="swiper-pagination desktop-pagination"></div>
-                <div className="swiper-button-next desktop-nav"></div>
-              </div>
+
             </div>
           </div>
         </div>

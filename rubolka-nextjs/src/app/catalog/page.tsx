@@ -26,6 +26,8 @@ function CatalogContent() {
   const [selectedColor, setSelectedColor] = useState('all')
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [displayedProducts, setDisplayedProducts] = useState<Product[]>([])
+  const [productsToShow, setProductsToShow] = useState(12) // Показываем по 12 товаров
 
   useEffect(() => {
     fetchProducts()
@@ -40,7 +42,10 @@ function CatalogContent() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('/api/products')
+      const response = await fetch('/api/products', {
+        cache: 'force-cache', // Кэшируем запрос
+        next: { revalidate: 300 } // Перезапрос каждые 5 минут
+      })
       const data = await response.json()
       if (data.success) {
         setProducts(data.products)
@@ -59,6 +64,21 @@ function CatalogContent() {
     
     return matchesCategory && matchesSize && matchesColor
   })
+
+  // Сброс счетчика при изменении фильтров
+  useEffect(() => {
+    setProductsToShow(12)
+  }, [selectedCategory, selectedSize, selectedColor])
+
+  // Обновляем отображаемые товары при изменении фильтров
+  useEffect(() => {
+    setDisplayedProducts(filteredProducts.slice(0, productsToShow))
+  }, [filteredProducts, productsToShow])
+
+  // Функция для загрузки дополнительных товаров
+  const loadMoreProducts = () => {
+    setProductsToShow(prev => prev + 12)
+  }
 
   const allSizes = Array.from(new Set(products.flatMap(p => p.sizes)))
   const allColors = Array.from(new Set(products.flatMap(p => p.colors)))
@@ -148,15 +168,21 @@ function CatalogContent() {
             <p className="text-gray-500">Попробуйте изменить фильтры</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {filteredProducts.map((product) => (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+              {displayedProducts.map((product) => (
               <div key={product._id} className="card overflow-hidden hover:border-primary/50 transition-colors">
                 <div className="relative h-64">
                   <Image
                     src={product.image || '/assets/catalog/placeholder.svg'}
                     alt={product.name}
                     fill
-                    className="object-cover"
+                    className="object-cover transition-transform duration-300 hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                    priority={displayedProducts.indexOf(product) < 4} // Приоритет для первых 4 товаров
+                    loading={displayedProducts.indexOf(product) < 4 ? 'eager' : 'lazy'}
+                    placeholder="blur"
+                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
                     unoptimized={product.image?.startsWith('data:') ? true : false}
                     onError={(e) => {
                       console.log('❌ Catalog image load error for:', product.image)
@@ -214,7 +240,20 @@ function CatalogContent() {
                 </div>
               </div>
             ))}
-          </div>
+            </div>
+            
+            {/* Кнопка "Загрузить еще" */}
+            {displayedProducts.length < filteredProducts.length && (
+              <div className="text-center mt-12">
+                <button
+                  onClick={loadMoreProducts}
+                  className="bg-primary text-black font-semibold py-3 px-8 rounded-lg hover:bg-yellow-400 transition-colors"
+                >
+                  Загрузить еще ({filteredProducts.length - displayedProducts.length} товаров)
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
       

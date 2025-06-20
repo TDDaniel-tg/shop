@@ -64,9 +64,7 @@ export default function Footer() {
                 info@rubolka.ru
               </a>
               <p>г. Москва</p>
-              <div className="mt-4">
-                <p className="text-sm mb-2">Мы в социальных сетях:</p>
-              </div>
+              
             </div>
           </div>
         </div>
