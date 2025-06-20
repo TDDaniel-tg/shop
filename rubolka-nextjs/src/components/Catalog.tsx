@@ -11,31 +11,31 @@ export default function Catalog() {
     },
     {
       category: 'caps',
-      image: '/assets/catalog/caps-placeholder.svg',
+      image: '/assets/catalog/caps-placeholder.jpg',
       title: 'КЕПКИ',
       description: 'Модные кепки и бейсболки'
     },
     {
       category: 'kids',
-      image: '/assets/catalog/kids-placeholder.svg',
+      image: '/assets/catalog/kids-placeholder.jpg',
       title: 'ДЕТСКИЕ ФУТБОЛКИ',
       description: 'Качественная одежда для детей'
     },
     {
       category: 'hoodies',
-      image: '/assets/catalog/hoodies-placeholder.svg',
+      image: '/assets/catalog/hoodies-placeholder.jpg',
       title: 'ХУДИ',
       description: 'Теплые и комфортные худи'
     },
     {
       category: 'sweatshirts',
-      image: '/assets/catalog/sweatshirts-placeholder.svg',
+      image: '/assets/catalog/sweatshirts-placeholder.jpg',
       title: 'СВИТШОТЫ',
       description: 'Стильные свитшоты для любого случая'
     },
     {
       category: 'longsleeves',
-      image: '/assets/catalog/longsleeves-placeholder.svg',
+      image: '/assets/catalog/longsleeves-placeholder.jpg',
       title: 'ЛОНГСЛИВЫ',
       description: 'Футболки с длинным рукавом'
     }

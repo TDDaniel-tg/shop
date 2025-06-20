@@ -47,7 +47,7 @@ export default function AdminPage() {
   const [productForm, setProductForm] = useState({
     name: '',
     price: '',
-    category: 'women',
+    category: 'tshirts',
     description: '',
     material: 'Хлопок 100%',
     colors: '',
@@ -321,7 +321,7 @@ export default function AdminPage() {
     setProductForm({
       name: '',
       price: '',
-      category: 'women',
+      category: 'tshirts',
       description: '',
       material: 'Хлопок 100%',
       colors: '',
@@ -344,6 +344,22 @@ export default function AdminPage() {
 
   const getOrderId = (order: Order): string => {
     return order.id || order._id || ''
+  }
+
+  const getCategoryName = (category: string): string => {
+    const categoryNames: Record<string, string> = {
+      'tshirts': 'Футболки',
+      'hoodies': 'Худи',
+      'sweatshirts': 'Свитшоты',
+      'longsleeves': 'Лонгсливы',
+      'kids': 'Детская одежда',
+      'caps': 'Кепки',
+      // Поддержка старых категорий для обратной совместимости
+      'women': 'Женские',
+      'men': 'Мужские',
+      'unisex': 'Унисекс'
+    }
+    return categoryNames[category] || category
   }
 
   if (!isAuthenticated) {
@@ -521,7 +537,7 @@ export default function AdminPage() {
                             </div>
                           </td>
                           <td className="px-4 py-2 text-gray-300">{product.name}</td>
-                          <td className="px-4 py-2 text-gray-300">{product.category}</td>
+                          <td className="px-4 py-2 text-gray-300">{getCategoryName(product.category)}</td>
                           <td className="px-4 py-2 text-gray-300">{product.price} ₽</td>
                           <td className="px-4 py-2 text-gray-300">{product.createdAt}</td>
                           <td className="px-4 py-2">
@@ -680,9 +696,12 @@ export default function AdminPage() {
                     onChange={(e) => setProductForm({...productForm, category: e.target.value})}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   >
-                    <option value="women">Женские</option>
-                    <option value="men">Мужские</option>
-                    <option value="unisex">Унисекс</option>
+                    <option value="tshirts">Футболки</option>
+                    <option value="hoodies">Худи</option>
+                    <option value="sweatshirts">Свитшоты</option>
+                    <option value="longsleeves">Лонгсливы</option>
+                    <option value="kids">Детская одежда</option>
+                    <option value="caps">Кепки</option>
                   </select>
                 </div>
               </div>

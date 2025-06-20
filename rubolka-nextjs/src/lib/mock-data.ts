@@ -39,6 +39,84 @@ const initialProducts = [
     material: "Хлопок 100%",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
+  },
+  {
+    id: '4',
+    name: "Классическая футболка",
+    price: 450,
+    category: "tshirts",
+    description: "Базовая футболка из качественного хлопка. Подходит для всех.",
+    image: "/assets/catalog/placeholder.svg",
+    colors: ["белый", "черный", "серый", "синий"],
+    sizes: ["XS", "S", "M", "L", "XL"],
+    material: "Хлопок 100%",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: '5',
+    name: "Теплое худи",
+    price: 890,
+    category: "hoodies",
+    description: "Мягкое и теплое худи с капюшоном. Идеально для прохладной погоды.",
+    image: "/assets/catalog/hoodies-placeholder.svg",
+    colors: ["черный", "серый", "темно-синий", "бордовый"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    material: "Хлопок 80%, полиэстер 20%",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: '6',
+    name: "Стильный свитшот",
+    price: 750,
+    category: "sweatshirts",
+    description: "Современный свитшот без капюшона. Отличная альтернатива худи.",
+    image: "/assets/catalog/sweatshirts-placeholder.svg",
+    colors: ["белый", "черный", "серый", "зеленый"],
+    sizes: ["S", "M", "L", "XL"],
+    material: "Хлопок 70%, полиэстер 30%",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: '7',
+    name: "Лонгслив базовый",
+    price: 550,
+    category: "longsleeves",
+    description: "Футболка с длинным рукавом. Практично и удобно на каждый день.",
+    image: "/assets/catalog/longsleeves-placeholder.svg",
+    colors: ["белый", "черный", "серый", "темно-синий"],
+    sizes: ["XS", "S", "M", "L", "XL"],
+    material: "Хлопок 95%, эластан 5%",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: '8',
+    name: "Детская футболка",
+    price: 320,
+    category: "kids",
+    description: "Мягкая и удобная футболка для детей. Гипоаллергенный материал.",
+    image: "/assets/catalog/kids-placeholder.svg",
+    colors: ["белый", "розовый", "голубой", "желтый"],
+    sizes: ["80", "86", "92", "98", "104", "110"],
+    material: "Хлопок 100%",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: '9',
+    name: "Бейсболка классическая",
+    price: 390,
+    category: "caps",
+    description: "Стильная бейсболка с регулируемым ремешком. Защита от солнца.",
+    image: "/assets/catalog/caps-placeholder.svg",
+    colors: ["черный", "белый", "темно-синий", "серый"],
+    sizes: ["ONE SIZE"],
+    material: "Хлопок 100%",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   }
 ]
 

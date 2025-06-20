@@ -103,14 +103,11 @@ function CatalogContent() {
               >
                 <option value="all">Все категории</option>
                 <option value="tshirts">Футболки</option>
-                <option value="caps">Кепки</option>
-                <option value="kids">Детские футболки</option>
                 <option value="hoodies">Худи</option>
                 <option value="sweatshirts">Свитшоты</option>
                 <option value="longsleeves">Лонгсливы</option>
-                <option value="women">Женские</option>
-                <option value="men">Мужские</option>
-                <option value="unisex">Унисекс</option>
+                <option value="kids">Детская одежда</option>
+                <option value="caps">Кепки</option>
               </select>
             </div>
 
