@@ -268,6 +268,90 @@ export default function Clients() {
           margin-top: 40px;
         }
 
+        @media (min-width: 769px) {
+          .reviews-swiper .swiper-button-prev,
+          .reviews-swiper .swiper-button-next {
+            display: none !important;
+          }
+
+          .reviews-navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-top: 40px;
+          }
+
+          .desktop-nav {
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #1e293b, #334155) !important;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            color: #ffd700 !important;
+            font-size: 18px;
+            position: relative !important;
+            overflow: hidden;
+            margin: 0 !important;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .desktop-nav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: -1;
+          }
+
+          .desktop-nav:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.3);
+            color: #000 !important;
+            border-color: transparent;
+          }
+
+          .desktop-nav:hover::before {
+            opacity: 1;
+          }
+
+          .desktop-nav:after {
+            font-size: 18px !important;
+            font-weight: bold;
+          }
+
+          .desktop-pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+          }
+
+          .desktop-pagination .swiper-pagination-bullet {
+            width: 14px !important;
+            height: 14px !important;
+            background: rgba(255, 255, 255, 0.3) !important;
+            opacity: 1 !important;
+            transition: all 0.4s ease;
+            border-radius: 14px;
+            margin: 0 5px !important;
+          }
+
+          .desktop-pagination .swiper-pagination-bullet-active {
+            background: linear-gradient(135deg, #ffd700, #ffed4e) !important;
+            transform: scale(1.2);
+            width: 30px !important;
+          }
+        }
+
         .reviews-swiper .swiper-button-prev,
         .reviews-swiper .swiper-button-next {
           width: 60px !important;
@@ -675,6 +759,13 @@ export default function Clients() {
                 <div className="swiper-button-next"></div>
                 <div className="swiper-pagination"></div>
               </Swiper>
+
+              {/* Desktop Navigation */}
+              <div className="reviews-navigation hidden md:flex">
+                <div className="swiper-button-prev desktop-nav"></div>
+                <div className="swiper-pagination desktop-pagination"></div>
+                <div className="swiper-button-next desktop-nav"></div>
+              </div>
             </div>
           </div>
         </div>

@@ -15,11 +15,11 @@ export default function Header() {
             <Image 
               src="/assets/logo.jpg" 
               alt="RUBOLKA" 
-              width={56} 
-              height={56} 
-              className="logo__img rounded-full object-cover object-center scale-125 border-2 border-primary/30 hover:border-primary/60 transition-colors overflow-hidden" 
+              width={72} 
+              height={72} 
+              className="logo__img rounded-full object-cover object-center scale-125 border-2 border-primary/30 hover:border-primary/60 transition-colors overflow-hidden md:w-16 md:h-16" 
             />
-            <span className="logo__text text-xl font-bold text-white">RUBOLKA</span>
+            <span className="logo__text text-2xl md:text-xl font-bold text-white">RUBOLKA</span>
           </Link>
           
           <nav className="nav hidden md:flex items-center gap-8">

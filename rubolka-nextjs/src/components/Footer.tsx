@@ -66,13 +66,6 @@ export default function Footer() {
               <p>г. Москва</p>
               <div className="mt-4">
                 <p className="text-sm mb-2">Мы в социальных сетях:</p>
-                <Image 
-                  src="/assets/qr-code.png" 
-                  alt="QR код для связи" 
-                  width={100} 
-                  height={100} 
-                  className="rounded-lg border border-gray-700"
-                />
               </div>
             </div>
           </div>
