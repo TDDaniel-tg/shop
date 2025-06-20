@@ -67,37 +67,145 @@ export default function AdminPage() {
   })
   const [showPassword, setShowPassword] = useState(false)
 
+  // Добавляем флаги для предотвращения повторных запросов
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false)
+  const [isLoadingOrders, setIsLoadingOrders] = useState(false)
+  const [lastProductsLoad, setLastProductsLoad] = useState<number>(0)
+  const [retryCount, setRetryCount] = useState(0)
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
+
   useEffect(() => {
     if (isAuthenticated) {
       fetchProducts()
       fetchOrders()
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, refreshTrigger])
 
-  const fetchProducts = async () => {
+  // Функция для принудительного обновления
+  const forceRefresh = () => {
+    setRefreshTrigger(prev => prev + 1)
+  }
+
+  const fetchProducts = async (retries = 3) => {
+    // Предотвращаем повторные запросы
+    if (isLoadingProducts) {
+      console.log('⏳ Products already loading, skipping...')
+      return
+    }
+
+    // Проверяем, не загружали ли мы недавно (менее 5 секунд назад)
+    const now = Date.now()
+    if (now - lastProductsLoad < 5000 && products.length > 0) {
+      console.log('📄 Using cached products data')
+      return
+    }
+
     try {
+      setIsLoadingProducts(true)
       setLoading(true)
-      const response = await fetch('/api/products')
+      
+      console.log('🔄 Fetching products...')
+      
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 15000) // 15 секунд таймаут
+      
+      const response = await fetch('/api/products', {
+        signal: controller.signal,
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      
+      clearTimeout(timeoutId)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+      }
+      
       const data = await response.json()
-      if (data.success) {
+      
+      if (data.success && Array.isArray(data.products)) {
         setProducts(data.products)
+        setLastProductsLoad(now)
+        setRetryCount(0)
+        
+        console.log(`✅ Successfully loaded ${data.products.length} products`)
+        
+        if (data.warning) {
+          console.warn('⚠️', data.warning)
+        }
+      } else {
+        throw new Error(data.error || 'Invalid response format')
       }
     } catch (error) {
-      console.error('Error fetching products:', error)
+      console.error('❌ Error fetching products:', error)
+      
+      // Retry logic
+      if (retries > 0 && (error as any)?.name !== 'AbortError') {
+        console.log(`🔄 Retrying... (${4 - retries}/3)`)
+        setTimeout(() => {
+          fetchProducts(retries - 1)
+        }, 2000 * (4 - retries)) // Увеличиваем задержку с каждой попыткой
+      } else {
+        console.error('💥 All retry attempts failed')
+        setRetryCount(prev => prev + 1)
+      }
     } finally {
+      setIsLoadingProducts(false)
       setLoading(false)
     }
   }
 
-  const fetchOrders = async () => {
+  const fetchOrders = async (retries = 3) => {
+    // Предотвращаем повторные запросы
+    if (isLoadingOrders) {
+      console.log('⏳ Orders already loading, skipping...')
+      return
+    }
+
     try {
-      const response = await fetch('/api/orders')
+      setIsLoadingOrders(true)
+      
+      console.log('🔄 Fetching orders...')
+      
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 15000)
+      
+      const response = await fetch('/api/orders', {
+        signal: controller.signal,
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      
+      clearTimeout(timeoutId)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+      }
+      
       const data = await response.json()
+      
       if (data.success) {
         setOrders(data.orders || [])
+        console.log(`✅ Successfully loaded ${(data.orders || []).length} orders`)
+      } else {
+        throw new Error(data.error || 'Invalid response format')
       }
     } catch (error) {
-      console.error('Error fetching orders:', error)
+      console.error('❌ Error fetching orders:', error)
+      
+      // Retry logic
+      if (retries > 0 && (error as any)?.name !== 'AbortError') {
+        console.log(`🔄 Retrying orders... (${4 - retries}/3)`)
+        setTimeout(() => {
+          fetchOrders(retries - 1)
+        }, 2000 * (4 - retries))
+      }
+    } finally {
+      setIsLoadingOrders(false)
     }
   }
 
@@ -182,7 +290,7 @@ export default function AdminPage() {
 
     // Сжимаем изображение перед загрузкой
     const compressedFile = await compressImage(selectedFile)
-    
+
     const formData = new FormData()
     formData.append('file', compressedFile)
 
@@ -256,7 +364,7 @@ export default function AdminPage() {
           }, 'image/jpeg', 0.7) // 70% качество для баланса размера и качества
         } else {
           resolve(file)
-        }
+    }
       }
       
       img.src = URL.createObjectURL(file)
@@ -366,7 +474,10 @@ export default function AdminPage() {
         }, 3000)
         
         // Обновляем список товаров в фоне
-        fetchProducts()
+        setTimeout(() => {
+          setLastProductsLoad(0) // Сбрасываем кэш для принудительной перезагрузки
+          fetchProducts()
+        }, 500)
       } else {
         console.error('❌ API Error:', result.error)
         alert(result.error || 'Ошибка при сохранении товара')
@@ -387,6 +498,7 @@ export default function AdminPage() {
         })
         const result = await response.json()
         if (result.success) {
+          setLastProductsLoad(0) // Сбрасываем кэш для принудительной перезагрузки
           await fetchProducts()
           alert('Товар удален!')
         } else {
@@ -470,7 +582,10 @@ export default function AdminPage() {
         }, 2000)
         
         // Обновляем список в фоне
-        fetchProducts()
+        setTimeout(() => {
+          setLastProductsLoad(0) // Сбрасываем кэш для принудительной перезагрузки
+          fetchProducts()
+        }, 500)
       } else {
         throw new Error(result.error || 'Ошибка создания товара')
       }
@@ -630,13 +745,38 @@ export default function AdminPage() {
           {activeTab === 'products' && (
             <div>
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-semibold text-white">Управление товарами</h2>
-                <button 
-                  onClick={handleAddProduct}
-                  className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition-colors"
-                >
-                  📷 Полная форма
-                </button>
+                <div className="flex items-center gap-4">
+                  <h2 className="text-xl font-semibold text-white">Управление товарами</h2>
+                  {(isLoadingProducts || loading) && (
+                    <div className="flex items-center gap-2 text-blue-400">
+                      <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+                      <span className="text-sm">Обновление...</span>
+                    </div>
+                  )}
+                  {retryCount > 0 && (
+                    <span className="text-red-400 text-sm">
+                      ⚠️ Проблемы с загрузкой ({retryCount} попыток)
+                    </span>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => {
+                      setLastProductsLoad(0)
+                      forceRefresh()
+                    }}
+                    disabled={isLoadingProducts || loading}
+                    className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    🔄 Обновить
+                  </button>
+                  <button 
+                    onClick={handleAddProduct}
+                    className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition-colors"
+                  >
+                    📷 Полная форма
+                  </button>
+                </div>
               </div>
               
               {/* Быстрая форма добавления */}
@@ -647,10 +787,32 @@ export default function AdminPage() {
                 />
               </div>
               
-              {loading ? (
+              {(loading && products.length === 0) ? (
                 <div className="text-center py-8">
                   <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                  <p className="text-gray-400">Загрузка...</p>
+                  <p className="text-gray-400">Загрузка товаров...</p>
+                </div>
+              ) : products.length === 0 ? (
+                <div className="text-center py-8">
+                  <div className="text-gray-400 mb-4">
+                    <svg className="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                    <p className="text-lg font-medium">Товаров пока нет</p>
+                    <p className="text-sm">Добавьте первый товар используя форму выше</p>
+                  </div>
+                  {retryCount > 0 && (
+                    <button 
+                      onClick={() => {
+                        setLastProductsLoad(0)
+                        setRetryCount(0)
+                        forceRefresh()
+                      }}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition-colors"
+                    >
+                      🔄 Попробовать снова
+                    </button>
+                  )}
                 </div>
               ) : (
                 <div className="overflow-x-auto">

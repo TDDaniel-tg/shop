@@ -275,10 +275,21 @@ export default function Clients() {
           border: 1px solid rgba(255, 215, 0, 0.2);
           color: #ffd700 !important;
           font-size: 18px;
-          position: relative;
+          position: absolute !important;
           overflow: hidden;
           margin-top: 0 !important;
           transition: all 0.4s ease;
+          top: 60% !important;
+          transform: translateY(-50%) !important;
+          z-index: 10;
+        }
+
+        .reviews-swiper .swiper-button-prev {
+          left: 20px !important;
+        }
+
+        .reviews-swiper .swiper-button-next {
+          right: 20px !important;
         }
 
         .reviews-swiper .swiper-button-prev::before,
@@ -295,9 +306,15 @@ export default function Clients() {
           z-index: -1;
         }
 
-        .reviews-swiper .swiper-button-prev:hover,
+        .reviews-swiper .swiper-button-prev:hover {
+          transform: translateY(-55px) !important;
+          box-shadow: 0 15px 30px rgba(255, 215, 0, 0.3);
+          color: #000 !important;
+          border-color: transparent;
+        }
+
         .reviews-swiper .swiper-button-next:hover {
-          transform: translateY(-5px);
+          transform: translateY(-55px) !important;
           box-shadow: 0 15px 30px rgba(255, 215, 0, 0.3);
           color: #000 !important;
           border-color: transparent;

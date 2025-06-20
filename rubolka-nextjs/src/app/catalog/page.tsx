@@ -169,7 +169,7 @@ function CatalogContent() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {displayedProducts.map((product) => (
               <div key={product._id} className="card overflow-hidden hover:border-primary/50 transition-colors">
                 <div className="relative h-64">
@@ -240,7 +240,7 @@ function CatalogContent() {
                 </div>
               </div>
             ))}
-            </div>
+          </div>
             
             {/* Кнопка "Загрузить еще" */}
             {displayedProducts.length < filteredProducts.length && (
