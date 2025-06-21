@@ -9,38 +9,21 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        montserrat: ['var(--font-montserrat)', 'sans-serif'],
-        sans: ['var(--font-montserrat)', 'ui-sans-serif', 'system-ui'],
+        inter: ['var(--font-inter)', 'sans-serif'],
+        sans: ['var(--font-inter)', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
       },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        primary: {
-          DEFAULT: "#F9E547",
-          50: "#FEF9C3",
-          100: "#FEF08A", 
-          200: "#FDE047",
-          300: "#FACC15",
-          400: "#EAB308",
-          500: "#F9E547",
-          600: "#CA8A04",
-          700: "#A16207",
-          800: "#854D0E",
-          900: "#713F12",
-        },
-        secondary: {
-          DEFAULT: "#000000",
-          50: "#F8F8F8",
-          100: "#F0F0F0",
-          200: "#E4E4E4",
-          300: "#D1D1D1",
-          400: "#A3A3A3",
-          500: "#737373",
-          600: "#525252",
-          700: "#404040",
-          800: "#262626",
-          900: "#171717",
-        },
+        primary: "var(--primary)",
+        'primary-dark': "var(--primary-dark)",
+        secondary: "var(--secondary)",
+        accent: "var(--accent)",
+        danger: "var(--danger)",
+        warning: "var(--warning)",
+        border: "var(--border)",
+        'text-muted': "var(--text-muted)",
+        'text-light': "var(--text-light)",
       },
       container: {
         center: true,
@@ -53,9 +36,30 @@ const config: Config = {
           "2xl": "1400px",
         },
       },
+      animation: {
+        'fade-in': 'fadeIn 0.5s ease-out',
+        'slide-in-left': 'slideInLeft 0.5s ease-out',
+        'slide-in-right': 'slideInRight 0.5s ease-out',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        slideInLeft: {
+          '0%': { opacity: '0', transform: 'translateX(-30px)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' },
+        },
+        slideInRight: {
+          '0%': { opacity: '0', transform: 'translateX(30px)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }
 
 export default config; 

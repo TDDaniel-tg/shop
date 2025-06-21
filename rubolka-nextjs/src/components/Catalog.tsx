@@ -1,90 +1,163 @@
-import Link from 'next/link'
+'use client'
+
+import { useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Catalog() {
+  const [activeCategory, setActiveCategory] = useState('all')
+
   const categories = [
+    { id: 'all', name: 'Все товары' },
+    { id: 'basic', name: 'Базовые модели' },
+    { id: 'premium', name: 'Премиум' },
+    { id: 'kids', name: 'Детские' },
+  ]
+
+  const products = [
     {
-      category: 'tshirts',
-      image: '/assets/catalog/hero-tshirt.jpg',
-      title: 'ФУТБОЛКИ',
-      description: 'Классические и стильные футболки'
+      id: 1,
+      name: 'Футболка базовая',
+      category: 'basic',
+      price: 'от 350 ₽',
+      description: '100% хлопок, плотность 160 г/м²',
+      colors: ['белый', 'черный', 'серый', 'синий'],
+      sizes: '42-60',
+      image: '/assets/catalog/hero-tshirt.jpg'
     },
     {
-      category: 'caps',
-      image: '/assets/catalog/caps-placeholder.jpg',
-      title: 'КЕПКИ',
-      description: 'Модные кепки и бейсболки'
+      id: 2,
+      name: 'Футболка премиум',
+      category: 'premium',
+      price: 'от 550 ₽',
+      description: 'Премиум хлопок, плотность 200 г/м²',
+      colors: ['белый', 'черный', 'бежевый'],
+      sizes: '44-58',
+      image: '/assets/catalog/men.jpg'
     },
     {
+      id: 3,
+      name: 'Футболка оверсайз',
+      category: 'basic',
+      price: 'от 450 ₽',
+      description: 'Свободный крой, 100% хлопок',
+      colors: ['белый', 'черный', 'хаки', 'бежевый'],
+      sizes: 'S-XXL',
+      image: '/assets/catalog/unisex.jpg'
+    },
+    {
+      id: 4,
+      name: 'Детская футболка',
       category: 'kids',
-      image: '/assets/catalog/kids-placeholder.jpg',
-      title: 'ДЕТСКИЕ ФУТБОЛКИ',
-      description: 'Качественная одежда для детей'
-    },
-    {
-      category: 'hoodies',
-      image: '/assets/catalog/hoodies-placeholder.jpg',
-      title: 'ХУДИ',
-      description: 'Теплые и комфортные худи'
-    },
-    {
-      category: 'sweatshirts',
-      image: '/assets/catalog/sweatshirts-placeholder.jpg',
-      title: 'СВИТШОТЫ',
-      description: 'Стильные свитшоты для любого случая'
-    },
-    {
-      category: 'longsleeves',
-      image: '/assets/catalog/longsleeves-placeholder.jpg',
-      title: 'ЛОНГСЛИВЫ',
-      description: 'Футболки с длинным рукавом'
+      price: 'от 250 ₽',
+      description: 'Мягкий хлопок, яркие принты',
+      colors: ['белый', 'розовый', 'голубой', 'желтый'],
+      sizes: '92-152',
+      image: '/assets/catalog/kids-placeholder.jpg'
     }
   ]
 
+  const filteredProducts = activeCategory === 'all' 
+    ? products 
+    : products.filter(product => product.category === activeCategory)
+
   return (
-    <section className="section bg-gray-800" id="catalog">
+    <section id="catalog" className="section bg-white">
       <div className="container">
-        <h2 className="section-title">
-          Каталог продукции
-        </h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {categories.map((cat, index) => (
-            <Link 
-              key={index}
-              href={`/catalog?category=${cat.category}`}
-              className="group relative block overflow-hidden rounded-lg border border-gray-700 hover:border-primary/50 transition-all"
+        <div className="text-center mb-12">
+          <h2 className="text-gray-900 mb-4">Каталог продукции</h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Широкий ассортимент качественных футболок для любых задач
+          </p>
+        </div>
+
+        {/* Category Filter */}
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
+          {categories.map((category) => (
+            <button
+              key={category.id}
+              onClick={() => setActiveCategory(category.id)}
+              className={`px-6 py-2 rounded-full font-medium transition-all ${
+                activeCategory === category.id
+                  ? 'bg-primary text-white shadow-md'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
             >
-              <Image 
-                src={cat.image} 
-                alt={cat.title} 
-                width={400}
-                height={300}
-                className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center transition-all duration-300 group-hover:bg-opacity-40">
-                <div className="text-center text-white p-4">
-                  <h3 className="text-2xl font-bold mb-2">
-                    {cat.title}
-                  </h3>
-                  <p className="text-gray-300 text-sm mb-3">
-                    {cat.description}
-                  </p>
-                  <span className="text-primary text-3xl group-hover:translate-x-2 inline-block transition-transform">→</span>
-                </div>
-              </div>
-            </Link>
+              {category.name}
+            </button>
           ))}
         </div>
-        
-        <div className="text-center mt-12">
-          <Link 
-            href="/catalog" 
-            className="btn btn-primary inline-flex items-center gap-3"
-          >
-            <span>📦</span>
-            Посмотреть весь каталог
-          </Link>
+
+        {/* Products Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {filteredProducts.map((product, index) => (
+            <div 
+              key={product.id} 
+              className="card group hover:shadow-lg transition-all fade-in"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <div className="relative h-64 mb-4 overflow-hidden rounded-lg bg-gray-100">
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute top-4 left-4">
+                  <span className="badge badge-primary">
+                    Хит продаж
+                  </span>
+                </div>
+              </div>
+
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                {product.name}
+              </h3>
+              
+              <p className="text-sm text-gray-600 mb-3">
+                {product.description}
+              </p>
+
+              <div className="space-y-2 mb-4">
+                <div className="flex items-center text-sm">
+                  <span className="text-gray-500 w-20">Размеры:</span>
+                  <span className="text-gray-700 font-medium">{product.sizes}</span>
+                </div>
+                <div className="flex items-center text-sm">
+                  <span className="text-gray-500 w-20">Цвета:</span>
+                  <span className="text-gray-700">{product.colors.length} вариантов</span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="text-2xl font-bold text-primary">
+                  {product.price}
+                </span>
+                <Link 
+                  href={`/catalog#${product.id}`}
+                  className="btn btn-outline btn-sm"
+                >
+                  Подробнее
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA Section */}
+        <div className="mt-16 text-center">
+          <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl p-8 md:p-12">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              Не нашли подходящую модель?
+            </h3>
+            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+              Мы можем изготовить футболки по вашим требованиям: 
+              особый крой, уникальная ткань или специальная обработка
+            </p>
+            <Link href="/catalog" className="btn btn-primary btn-lg">
+              Смотреть весь каталог
+            </Link>
+          </div>
         </div>
       </div>
     </section>

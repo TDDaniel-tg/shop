@@ -3,27 +3,24 @@
 import { useEffect, useState } from 'react'
 
 export default function Preloader() {
-  const [isVisible, setIsVisible] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsVisible(false)
-    }, 2000) // Показываем preloader 2 секунды
+      setIsLoading(false)
+    }, 1000)
 
     return () => clearTimeout(timer)
   }, [])
 
-  if (!isVisible) return null
+  if (!isLoading) return null
 
   return (
-    <div className={`preloader ${!isVisible ? 'hidden' : ''}`}>
+    <div className={`preloader ${!isLoading ? 'hidden' : ''}`}>
       <div className="preloader-content">
-        <div className="preloader-logo">
-          R
-        </div>
-        <div className="preloader-text">RUBOLKA</div>
-        <div className="preloader-subtitle">Твой оптовый поставщик</div>
-        <div className="spinner"></div>
+        <div className="preloader-logo"></div>
+        <h2 className="text-xl font-semibold text-gray-800 mt-4">RUBOLKA</h2>
+        <p className="text-sm text-gray-500 mt-1">Загружаем каталог...</p>
       </div>
     </div>
   )
