@@ -47,11 +47,11 @@ export default function Advantages() {
   ]
 
   return (
-    <section id="advantages" className="section bg-gray-50">
+    <section id="advantages" className="section bg-gray-50 dark:bg-gray-800">
       <div className="container">
         <div className="text-center mb-12 fade-in">
-          <h2 className="text-gray-900 mb-4">Почему выбирают нас</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <h2 className="text-gray-900 dark:text-white mb-4">Почему выбирают нас</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Более 8 лет мы производим качественные футболки для российского рынка
           </p>
         </div>
@@ -66,10 +66,10 @@ export default function Advantages() {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 text-primary rounded-2xl mb-4">
                 {advantage.icon}
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 {advantage.title}
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-300">
                 {advantage.description}
               </p>
             </div>
@@ -77,22 +77,22 @@ export default function Advantages() {
         </div>
 
         {/* Statistics */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 p-8 bg-white rounded-2xl shadow-sm">
+        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 p-8 bg-white dark:bg-gray-700 rounded-2xl shadow-sm">
           <div className="text-center">
             <div className="text-3xl font-bold text-primary mb-1">500+</div>
-            <div className="text-sm text-gray-600">Довольных клиентов</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300">Довольных клиентов</div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold text-primary mb-1">1М+</div>
-            <div className="text-sm text-gray-600">Произведено футболок</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300">Произведено футболок</div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold text-primary mb-1">8 лет</div>
-            <div className="text-sm text-gray-600">На рынке</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300">На рынке</div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold text-primary mb-1">3 дня</div>
-            <div className="text-sm text-gray-600">Минимальный срок</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300">Минимальный срок</div>
           </div>
         </div>
       </div>

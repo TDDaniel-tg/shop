@@ -51,18 +51,18 @@ export default function WorkProcess() {
   ]
 
   return (
-    <section id="process" className="section bg-gray-50">
+    <section id="process" className="section bg-gray-50 dark:bg-gray-800">
       <div className="container">
         <div className="text-center mb-12">
-          <h2 className="text-gray-900 mb-4">Как мы работаем</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <h2 className="text-gray-900 dark:text-white mb-4">Как мы работаем</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Простой и прозрачный процесс сотрудничества от заявки до получения готовой продукции
           </p>
         </div>
 
         <div className="relative">
           {/* Desktop Timeline Line */}
-          <div className="hidden lg:block absolute top-24 left-0 right-0 h-0.5 bg-gray-200">
+          <div className="hidden lg:block absolute top-24 left-0 right-0 h-0.5 bg-gray-200 dark:bg-gray-600">
             <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary to-primary/0"></div>
           </div>
 
@@ -76,7 +76,7 @@ export default function WorkProcess() {
               >
                 {/* Icon Circle */}
                 <div className="relative mb-6">
-                  <div className="inline-flex items-center justify-center w-20 h-20 bg-white border-4 border-gray-100 rounded-full shadow-lg relative z-10">
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-white dark:bg-gray-700 border-4 border-gray-100 dark:border-gray-600 rounded-full shadow-lg relative z-10">
                     <div className="text-primary">
                       {step.icon}
                     </div>
@@ -89,10 +89,10 @@ export default function WorkProcess() {
                 </div>
 
                 {/* Content */}
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
                   {step.title}
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-gray-300">
                   {step.description}
                 </p>
 
@@ -111,7 +111,7 @@ export default function WorkProcess() {
 
         {/* CTA */}
         <div className="mt-16 text-center">
-          <p className="text-lg text-gray-600 mb-6">
+          <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
             Готовы сделать заказ? Начните с бесплатной консультации!
           </p>
           <button className="btn btn-primary btn-lg">

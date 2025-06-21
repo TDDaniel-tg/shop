@@ -62,11 +62,11 @@ export default function Catalog() {
     : products.filter(product => product.category === activeCategory)
 
   return (
-    <section id="catalog" className="section bg-white">
+    <section id="catalog" className="section bg-white dark:bg-gray-900">
       <div className="container">
         <div className="text-center mb-12">
-          <h2 className="text-gray-900 mb-4">Каталог продукции</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <h2 className="text-gray-900 dark:text-white mb-4">Каталог продукции</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Широкий ассортимент качественных футболок для любых задач
           </p>
         </div>
@@ -80,7 +80,7 @@ export default function Catalog() {
               className={`px-6 py-2 rounded-full font-medium transition-all ${
                 activeCategory === category.id
                   ? 'bg-primary text-white shadow-md'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
               }`}
             >
               {category.name}
@@ -110,22 +110,22 @@ export default function Catalog() {
                 </div>
               </div>
 
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 {product.name}
               </h3>
               
-              <p className="text-sm text-gray-600 mb-3">
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
                 {product.description}
               </p>
 
               <div className="space-y-2 mb-4">
                 <div className="flex items-center text-sm">
-                  <span className="text-gray-500 w-20">Размеры:</span>
-                  <span className="text-gray-700 font-medium">{product.sizes}</span>
+                  <span className="text-gray-500 dark:text-gray-400 w-20">Размеры:</span>
+                  <span className="text-gray-700 dark:text-gray-300 font-medium">{product.sizes}</span>
                 </div>
                 <div className="flex items-center text-sm">
-                  <span className="text-gray-500 w-20">Цвета:</span>
-                  <span className="text-gray-700">{product.colors.length} вариантов</span>
+                  <span className="text-gray-500 dark:text-gray-400 w-20">Цвета:</span>
+                  <span className="text-gray-700 dark:text-gray-300">{product.colors.length} вариантов</span>
                 </div>
               </div>
 
@@ -147,10 +147,10 @@ export default function Catalog() {
         {/* CTA Section */}
         <div className="mt-16 text-center">
           <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl p-8 md:p-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
               Не нашли подходящую модель?
             </h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+            <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
               Мы можем изготовить футболки по вашим требованиям: 
               особый крой, уникальная ткань или специальная обработка
             </p>

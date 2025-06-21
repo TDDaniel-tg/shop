@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { ThemeProvider } from "@/lib/theme-context";
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Preloader from '@/components/Preloader'
@@ -55,13 +56,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={inter.variable}>
-      <body className="font-sans antialiased">
-        <Preloader />
-        <Header />
-        <main className="min-h-screen">
-          {children}
-        </main>
-        <Footer />
+      <body className="font-sans antialiased bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors">
+        <ThemeProvider>
+          <Preloader />
+          <Header />
+          <main className="min-h-screen">
+            {children}
+          </main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

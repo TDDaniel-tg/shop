@@ -4,7 +4,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-gray-100 text-gray-700">
+    <footer className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
       <div className="container">
         <div className="py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
@@ -13,7 +13,7 @@ export default function Footer() {
               <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">R</span>
               </div>
-              <span className="font-bold text-xl text-gray-900">RUBOLKA</span>
+              <span className="font-bold text-xl text-gray-900 dark:text-white">RUBOLKA</span>
             </div>
             <p className="text-sm leading-relaxed mb-4">
               Производство и оптовые поставки качественных футболок для бизнеса
@@ -39,7 +39,7 @@ export default function Footer() {
 
           {/* Products */}
           <div>
-            <h4 className="font-semibold text-gray-900 mb-4">Продукция</h4>
+            <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Продукция</h4>
             <ul className="space-y-2">
               <li><Link href="/catalog" className="text-sm hover:text-primary transition-colors">Каталог футболок</Link></li>
               <li><Link href="#" className="text-sm hover:text-primary transition-colors">Базовые модели</Link></li>
@@ -50,7 +50,7 @@ export default function Footer() {
 
           {/* Company */}
           <div>
-            <h4 className="font-semibold text-gray-900 mb-4">Компания</h4>
+            <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Компания</h4>
             <ul className="space-y-2">
               <li><Link href="#about" className="text-sm hover:text-primary transition-colors">О компании</Link></li>
               <li><Link href="#process" className="text-sm hover:text-primary transition-colors">Процесс работы</Link></li>
@@ -61,7 +61,7 @@ export default function Footer() {
 
           {/* Contacts */}
           <div>
-            <h4 className="font-semibold text-gray-900 mb-4">Контакты</h4>
+            <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Контакты</h4>
             <ul className="space-y-3">
               <li>
                 <a href="tel:+79991234567" className="text-sm hover:text-primary transition-colors flex items-center space-x-2">
@@ -93,7 +93,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-200 py-6">
+        <div className="border-t border-gray-200 dark:border-gray-600 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-sm">
               © {currentYear} RUBOLKA. Все права защищены.

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 interface Product {
   _id: string
@@ -25,9 +26,12 @@ export default function OrderModal({ isOpen, onClose, product }: OrderModalProps
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
+    email: '',
     size: '',
     color: '',
-    quantity: 1
+    quantity: 1,
+    comment: '',
+    privacy: false
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
@@ -48,9 +52,12 @@ export default function OrderModal({ isOpen, onClose, product }: OrderModalProps
     setFormData({
       name: '',
       phone: '',
+      email: '',
       size: '',
       color: '',
-      quantity: 1
+      quantity: 1,
+      comment: '',
+      privacy: false
     })
     setSubmitStatus('idle')
   }
@@ -121,11 +128,20 @@ export default function OrderModal({ isOpen, onClose, product }: OrderModalProps
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target
+    const checked = (e.target as HTMLInputElement).checked
+    
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'quantity' ? parseInt(value) : value
+      [name]: type === 'checkbox' ? checked : name === 'quantity' ? parseInt(value) || 1 : value
+    }))
+  }
+
+  const handleQuantityChange = (newQuantity: number) => {
+    setFormData(prev => ({
+      ...prev,
+      quantity: newQuantity
     }))
   }
 
@@ -135,184 +151,221 @@ export default function OrderModal({ isOpen, onClose, product }: OrderModalProps
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-900 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-xl">
         <div className="p-6">
-          {/* Заголовок модального окна */}
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-white">Оформить заказ</h2>
-            <button
-              onClick={handleClose}
-              className="text-gray-400 hover:text-white text-3xl leading-none"
-              disabled={isSubmitting}
+            <h2 className="text-2xl font-bold text-gray-900">Оформление заказа</h2>
+            <button 
+              onClick={onClose}
+              className="text-gray-600 hover:text-gray-900 text-2xl"
             >
               ×
             </button>
           </div>
 
-          {/* Информация о товаре */}
-          <div className="flex gap-4 mb-6 p-4 bg-gray-800 rounded-lg">
-            <div className="relative w-20 h-20 flex-shrink-0">
-              <Image
-                src={product.image || '/assets/catalog/placeholder.svg'}
-                alt={product.name}
-                fill
-                className="object-cover rounded"
-              />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold text-white mb-1">{product.name}</h3>
-              <p className="text-gray-400 text-sm mb-2">{product.material}</p>
-              <p className="text-primary font-bold text-xl">{product.price}₽</p>
-            </div>
-          </div>
-
-          {/* Статус отправки */}
-          {submitStatus === 'success' && (
-            <div className="mb-6 p-4 bg-green-900 border border-green-700 rounded-lg">
-              <div className="flex items-center gap-2 text-green-300">
-                <span className="text-2xl">✅</span>
-                <div>
-                  <p className="font-semibold">Заказ успешно оформлен!</p>
-                  <p className="text-sm">Наш менеджер свяжется с вами в ближайшее время</p>
-                </div>
+          {product && (
+            <div className="flex gap-4 mb-6 p-4 bg-gray-100 rounded-lg">
+              <div className="relative w-24 h-24 rounded-lg overflow-hidden">
+                <Image
+                  src={product.image || '/assets/catalog/placeholder.svg'}
+                  alt={product.name}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-gray-900">{product.name}</h3>
+                <p className="text-gray-600">{product.material}</p>
+                <p className="text-xl font-bold text-primary mt-2">от {product.price} ₽</p>
               </div>
             </div>
           )}
 
-          {submitStatus === 'error' && (
-            <div className="mb-6 p-4 bg-red-900 border border-red-700 rounded-lg">
-              <div className="flex items-center gap-2 text-red-300">
-                <span className="text-2xl">❌</span>
-                <div>
-                  <p className="font-semibold">Ошибка оформления заказа</p>
-                  <p className="text-sm">Попробуйте еще раз или позвоните по телефону +7 937 560-64-02</p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Форма заказа */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Имя */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-gray-700 font-medium mb-1">
+                  Количество
+                </label>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => handleQuantityChange(Math.max(1, formData.quantity - 1))}
+                    className="w-10 h-10 rounded-lg bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors"
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    name="quantity"
+                    value={formData.quantity}
+                    onChange={handleChange}
+                    min="1"
+                    className="w-20 text-center px-2 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleQuantityChange(formData.quantity + 1)}
+                    className="w-10 h-10 rounded-lg bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-gray-700 font-medium mb-1">
+                  Итого
+                </label>
+                <p className="text-2xl font-bold text-primary">
+                  {product ? (formData.quantity * product.price).toLocaleString() : 0} ₽
+                </p>
+              </div>
+            </div>
+
             <div>
-              <label className="block text-white font-medium mb-2">Ваше имя *</label>
+              <label className="block text-gray-700 font-medium mb-1">
+                Ваше имя <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 name="name"
-                required
                 value={formData.name}
                 onChange={handleChange}
+                required
+                className="w-full px-4 py-3 bg-white text-gray-900 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
                 disabled={isSubmitting}
-                className="w-full px-4 py-3 bg-gray-800 text-white rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
-                placeholder="Введите ваше имя"
               />
             </div>
 
-            {/* Телефон */}
             <div>
-              <label className="block text-white font-medium mb-2">Телефон *</label>
+              <label className="block text-gray-700 font-medium mb-1">
+                Телефон <span className="text-red-500">*</span>
+              </label>
               <input
                 type="tel"
                 name="phone"
-                required
                 value={formData.phone}
                 onChange={handleChange}
+                required
+                placeholder="+7 (___) ___-__-__"
+                className="w-full px-4 py-3 bg-white text-gray-900 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
                 disabled={isSubmitting}
-                pattern="[\+]?[7-8]?[\(\s]?[0-9]{3}[\)\s]?[0-9]{3}[\-\s]?[0-9]{2}[\-\s]?[0-9]{2}"
-                title="Введите номер в формате: +7 (999) 123-45-67"
-                className="w-full px-4 py-3 bg-gray-800 text-white rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
-                placeholder="+7 (999) 123-45-67"
               />
             </div>
 
-            {/* Размер */}
             <div>
-              <label className="block text-white font-medium mb-2">Размер *</label>
-              <select
-                name="size"
-                required
-                value={formData.size}
-                onChange={handleChange}
-                disabled={isSubmitting}
-                className="w-full px-4 py-3 bg-gray-800 text-white rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
-              >
-                {product.sizes.map(size => (
-                  <option key={size} value={size}>{size}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Цвет */}
-            <div>
-              <label className="block text-white font-medium mb-2">Цвет *</label>
-              <select
-                name="color"
-                required
-                value={formData.color}
-                onChange={handleChange}
-                disabled={isSubmitting}
-                className="w-full px-4 py-3 bg-gray-800 text-white rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
-              >
-                {product.colors.map(color => (
-                  <option key={color} value={color}>{color}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Количество */}
-            <div>
-              <label className="block text-white font-medium mb-2">Количество</label>
+              <label className="block text-gray-700 font-medium mb-1">
+                Email <span className="text-red-500">*</span>
+              </label>
               <input
-                type="number"
-                name="quantity"
-                min="1"
-                max="100"
-                value={formData.quantity}
+                type="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
+                required
+                className="w-full px-4 py-3 bg-white text-gray-900 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
                 disabled={isSubmitting}
-                className="w-full px-4 py-3 bg-gray-800 text-white rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
               />
             </div>
 
-            {/* Итоговая сумма */}
-            <div className="p-4 bg-gray-800 rounded-lg">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">Итого:</span>
-                <span className="text-2xl font-bold text-primary">{totalPrice.toLocaleString()}₽</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-gray-700 font-medium mb-1">
+                  Размер
+                </label>
+                <select
+                  name="size"
+                  value={formData.size}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-white text-gray-900 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
+                  disabled={isSubmitting}
+                >
+                  <option value="">Выберите размер</option>
+                  {product?.sizes.map(size => (
+                    <option key={size} value={size}>{size}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-gray-700 font-medium mb-1">
+                  Цвет
+                </label>
+                <select
+                  name="color"
+                  value={formData.color}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-white text-gray-900 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
+                  disabled={isSubmitting}
+                >
+                  <option value="">Выберите цвет</option>
+                  {product?.colors.map(color => (
+                    <option key={color} value={color}>{color}</option>
+                  ))}
+                </select>
               </div>
             </div>
 
-            {/* Кнопки */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Комментарий к заказу
+              </label>
+              <textarea
+                name="comment"
+                value={formData.comment}
+                onChange={handleChange}
+                rows={3}
+                className="w-full px-4 py-3 bg-white text-gray-900 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
+                disabled={isSubmitting}
+                placeholder="Дополнительные пожелания..."
+              />
+            </div>
+
+            <div className="p-4 bg-gray-100 rounded-lg">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="privacy"
+                  checked={formData.privacy}
+                  onChange={handleChange}
+                  className="mt-1 w-4 h-4 text-primary rounded focus:ring-2 focus:ring-primary"
+                  required
+                />
+                <span className="text-sm text-gray-600">
+                  Я согласен на обработку персональных данных в соответствии с{' '}
+                  <Link href="/privacy" className="text-primary hover:underline" target="_blank">
+                    политикой конфиденциальности
+                  </Link>
+                </span>
+              </label>
+            </div>
+
             <div className="flex gap-4 pt-4">
               <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 px-6 py-3 bg-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-300 transition-colors disabled:opacity-50"
+                disabled={isSubmitting}
+              >
+                Отмена
+              </button>
+              <button
                 type="submit"
-                disabled={isSubmitting || submitStatus === 'success'}
-                className="flex-1 bg-primary text-black font-bold py-3 px-4 rounded-lg hover:bg-yellow-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                className="flex-1 px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                disabled={isSubmitting || !formData.privacy}
               >
                 {isSubmitting ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin mr-2"></div>
-                    Оформляем заказ...
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                    Отправка...
                   </>
-                ) : submitStatus === 'success' ? (
-                  'Заказ оформлен!'
                 ) : (
                   'Оформить заказ'
                 )}
               </button>
-              <button
-                type="button"
-                onClick={handleClose}
-                disabled={isSubmitting}
-                className="flex-1 bg-gray-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-500 transition-colors disabled:opacity-50"
-              >
-                Отмена
-              </button>
             </div>
-
-            <p className="text-xs text-gray-400 text-center mt-2">
-              Нажимая "Оформить заказ", вы соглашаетесь с обработкой персональных данных
-            </p>
           </form>
         </div>
       </div>

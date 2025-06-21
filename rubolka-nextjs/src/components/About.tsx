@@ -21,14 +21,14 @@ export default function About() {
   ]
 
   return (
-    <section id="about" className="section bg-gray-50">
+    <section id="about" className="section bg-gray-50 dark:bg-gray-800">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Column - Image */}
           <div className="order-2 lg:order-1 slide-in-left">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-accent/10 rounded-3xl transform -rotate-3"></div>
-              <div className="relative bg-white rounded-3xl shadow-xl overflow-hidden">
+              <div className="relative bg-white dark:bg-gray-700 rounded-3xl shadow-xl overflow-hidden">
                 <Image
                   src="/assets/about/production_1.jpg"
                   alt="Производство RUBOLKA"
@@ -67,10 +67,10 @@ export default function About() {
               <span className="badge badge-primary mb-4 inline-block">
                 О компании
               </span>
-              <h2 className="text-gray-900 mb-6">
+              <h2 className="text-gray-900 dark:text-white mb-6">
                 Собственное производство полного цикла
               </h2>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+              <p className="text-lg text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
                 RUBOLKA — это современное производство текстильной продукции, 
                 оснащенное передовым оборудованием. Мы контролируем весь процесс 
                 создания футболок: от закупки ткани до финальной упаковки.
@@ -83,10 +83,10 @@ export default function About() {
                 <div key={index} className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
                       {feature.title}
                     </h4>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
                       {feature.description}
                     </p>
                   </div>
@@ -114,8 +114,8 @@ export default function About() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
               </svg>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-1">2015</h3>
-            <p className="text-sm text-gray-600">Год основания</p>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">2015</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">Год основания</p>
           </div>
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 text-primary rounded-2xl mb-4">
@@ -123,8 +123,8 @@ export default function About() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-1">50+</h3>
-            <p className="text-sm text-gray-600">Сотрудников</p>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">50+</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">Сотрудников</p>
           </div>
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 text-primary rounded-2xl mb-4">
@@ -132,8 +132,8 @@ export default function About() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-1">50 000</h3>
-            <p className="text-sm text-gray-600">Футболок в месяц</p>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">50 000</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">Футболок в месяц</p>
           </div>
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 text-primary rounded-2xl mb-4">
@@ -141,8 +141,8 @@ export default function About() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-1">87</h3>
-            <p className="text-sm text-gray-600">Городов доставки</p>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">87</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">Городов доставки</p>
           </div>
         </div>
       </div>

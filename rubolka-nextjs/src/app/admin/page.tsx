@@ -623,24 +623,24 @@ export default function AdminPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="bg-gray-800 p-8 rounded-lg shadow-lg max-w-md w-full border border-gray-700">
-          <h1 className="text-2xl font-bold text-center mb-6 text-white">Администратор</h1>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+          <h1 className="text-2xl font-bold text-center mb-6 text-gray-900">Администратор</h1>
           <form onSubmit={handleLogin}>
             <div className="mb-4">
-              <label className="block text-gray-300 text-sm font-bold mb-2">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
                 Логин
               </label>
               <input
                 type="text"
                 value={loginData.username}
                 onChange={(e) => setLoginData({...loginData, username: e.target.value})}
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary placeholder-gray-400"
+                className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary placeholder-gray-400"
                 placeholder="admin"
               />
             </div>
             <div className="mb-6">
-              <label className="block text-gray-300 text-sm font-bold mb-2">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
                 Пароль
               </label>
               <div className="relative">
@@ -648,13 +648,13 @@ export default function AdminPage() {
                   type={showPassword ? "text" : "password"}
                   value={loginData.password}
                   onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-                  className="w-full px-3 py-2 pr-10 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary placeholder-gray-400"
+                  className="w-full px-3 py-2 pr-10 bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary placeholder-gray-400"
                   placeholder="admin123"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-900"
                 >
                   {showPassword ? (
                     // Иконка "скрыть"
@@ -670,13 +670,13 @@ export default function AdminPage() {
                   )}
                 </button>
               </div>
-              <p className="text-xs text-gray-400 mt-1">
-                Логин: <span className="text-green-400">admin</span> | Пароль: <span className="text-green-400">admin123</span>
+              <p className="text-xs text-gray-500 mt-1">
+                Логин: <span className="text-green-600">admin</span> | Пароль: <span className="text-green-600">admin123</span>
               </p>
             </div>
             <button
               type="submit"
-              className="w-full bg-primary text-black font-bold py-2 px-4 rounded-lg hover:bg-yellow-400 transition-colors"
+              className="w-full bg-primary text-white font-bold py-2 px-4 rounded-lg hover:bg-primary-dark transition-colors"
             >
               Войти
             </button>
@@ -687,12 +687,12 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-gray-800 shadow border-b border-gray-700">
+      <header className="bg-white shadow border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <h1 className="text-3xl font-bold text-white">Админ-панель RUBOLKA</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Админ-панель RUBOLKA</h1>
             <button
               onClick={() => setIsAuthenticated(false)}
               className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
@@ -705,14 +705,14 @@ export default function AdminPage() {
 
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Tabs */}
-        <div className="border-b border-gray-700 mb-6">
+        <div className="border-b border-gray-200 mb-6">
           <nav className="-mb-px flex space-x-8">
             <button
               onClick={() => setActiveTab('products')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'products'
                   ? 'border-primary text-primary'
-                  : 'border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
               }`}
             >
               Товары ({products.length})
@@ -722,7 +722,7 @@ export default function AdminPage() {
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'orders'
                   ? 'border-primary text-primary'
-                  : 'border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
               }`}
             >
               Заказы ({orders.length})
@@ -732,7 +732,7 @@ export default function AdminPage() {
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'analytics'
                   ? 'border-primary text-primary'
-                  : 'border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
               }`}
             >
               Аналитика
@@ -741,20 +741,20 @@ export default function AdminPage() {
         </div>
 
         {/* Content */}
-        <div className="bg-gray-800 shadow rounded-lg p-6 border border-gray-700">
+        <div className="bg-white shadow rounded-lg p-6">
           {activeTab === 'products' && (
             <div>
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-4">
-                  <h2 className="text-xl font-semibold text-white">Управление товарами</h2>
+                  <h2 className="text-xl font-semibold text-gray-900">Управление товарами</h2>
                   {(isLoadingProducts || loading) && (
-                    <div className="flex items-center gap-2 text-blue-400">
-                      <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="flex items-center gap-2 text-blue-600">
+                      <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
                       <span className="text-sm">Обновление...</span>
                     </div>
                   )}
                   {retryCount > 0 && (
-                    <span className="text-red-400 text-sm">
+                    <span className="text-red-600 text-sm">
                       ⚠️ Проблемы с загрузкой ({retryCount} попыток)
                     </span>
                   )}
@@ -766,13 +766,13 @@ export default function AdminPage() {
                       forceRefresh()
                     }}
                     disabled={isLoadingProducts || loading}
-                    className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
                     🔄 Обновить
                   </button>
                   <button 
                     onClick={handleAddProduct}
-                    className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition-colors"
+                    className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
                   >
                     📷 Полная форма
                   </button>
@@ -790,11 +790,11 @@ export default function AdminPage() {
               {(loading && products.length === 0) ? (
                 <div className="text-center py-8">
                   <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                  <p className="text-gray-400">Загрузка товаров...</p>
+                  <p className="text-gray-600">Загрузка товаров...</p>
                 </div>
               ) : products.length === 0 ? (
                 <div className="text-center py-8">
-                  <div className="text-gray-400 mb-4">
+                  <div className="text-gray-600 mb-4">
                     <svg className="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                     </svg>
@@ -808,7 +808,7 @@ export default function AdminPage() {
                         setRetryCount(0)
                         forceRefresh()
                       }}
-                      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition-colors"
+                      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                     >
                       🔄 Попробовать снова
                     </button>
@@ -818,20 +818,20 @@ export default function AdminPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full table-auto">
                     <thead>
-                      <tr className="bg-gray-700">
-                        <th className="px-4 py-2 text-left text-gray-300">Изображение</th>
-                        <th className="px-4 py-2 text-left text-gray-300">Название</th>
-                        <th className="px-4 py-2 text-left text-gray-300">Категория</th>
-                        <th className="px-4 py-2 text-left text-gray-300">Цена</th>
-                        <th className="px-4 py-2 text-left text-gray-300">Дата создания</th>
-                        <th className="px-4 py-2 text-left text-gray-300">Действия</th>
+                      <tr className="bg-gray-100">
+                        <th className="px-4 py-2 text-left text-gray-700">Изображение</th>
+                        <th className="px-4 py-2 text-left text-gray-700">Название</th>
+                        <th className="px-4 py-2 text-left text-gray-700">Категория</th>
+                        <th className="px-4 py-2 text-left text-gray-700">Цена</th>
+                        <th className="px-4 py-2 text-left text-gray-700">Дата создания</th>
+                        <th className="px-4 py-2 text-left text-gray-700">Действия</th>
                       </tr>
                     </thead>
                     <tbody>
                       {products.map(product => (
-                        <tr key={getProductId(product)} className="border-b border-gray-600">
+                        <tr key={getProductId(product)} className="border-b border-gray-200">
                           <td className="px-4 py-2">
-                            <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-700 flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
                               {product.image ? (
                                 <Image
                                   src={product.image}
@@ -850,20 +850,20 @@ export default function AdminPage() {
                               )}
                             </div>
                           </td>
-                          <td className="px-4 py-2 text-gray-300">{product.name}</td>
-                          <td className="px-4 py-2 text-gray-300">{getCategoryName(product.category)}</td>
-                          <td className="px-4 py-2 text-gray-300">{product.price} ₽</td>
-                          <td className="px-4 py-2 text-gray-300">{product.createdAt}</td>
+                          <td className="px-4 py-2 text-gray-700">{product.name}</td>
+                          <td className="px-4 py-2 text-gray-700">{getCategoryName(product.category)}</td>
+                          <td className="px-4 py-2 text-gray-700">{product.price} ₽</td>
+                          <td className="px-4 py-2 text-gray-700">{product.createdAt}</td>
                           <td className="px-4 py-2">
                             <button 
                               onClick={() => handleEditProduct(product)}
-                              className="text-blue-400 hover:text-blue-300 mr-2"
+                              className="text-blue-600 hover:text-blue-700 mr-2"
                             >
                               Редактировать
                             </button>
                             <button 
                               onClick={() => handleDeleteProduct(getProductId(product))}
-                              className="text-red-400 hover:text-red-300"
+                              className="text-red-600 hover:text-red-700"
                             >
                               Удалить
                             </button>
@@ -879,42 +879,42 @@ export default function AdminPage() {
 
           {activeTab === 'orders' && (
             <div>
-              <h2 className="text-xl font-semibold mb-6 text-white">Управление заказами</h2>
+              <h2 className="text-xl font-semibold mb-6 text-gray-900">Управление заказами</h2>
               
               <div className="overflow-x-auto">
                 <table className="w-full table-auto">
                   <thead>
-                    <tr className="bg-gray-700">
-                      <th className="px-4 py-2 text-left text-gray-300">ID заказа</th>
-                      <th className="px-4 py-2 text-left text-gray-300">Клиент</th>
-                      <th className="px-4 py-2 text-left text-gray-300">Сумма</th>
-                      <th className="px-4 py-2 text-left text-gray-300">Статус</th>
-                      <th className="px-4 py-2 text-left text-gray-300">Дата</th>
-                      <th className="px-4 py-2 text-left text-gray-300">Действия</th>
+                    <tr className="bg-gray-100">
+                      <th className="px-4 py-2 text-left text-gray-700">ID заказа</th>
+                      <th className="px-4 py-2 text-left text-gray-700">Клиент</th>
+                      <th className="px-4 py-2 text-left text-gray-700">Сумма</th>
+                      <th className="px-4 py-2 text-left text-gray-700">Статус</th>
+                      <th className="px-4 py-2 text-left text-gray-700">Дата</th>
+                      <th className="px-4 py-2 text-left text-gray-700">Действия</th>
                     </tr>
                   </thead>
                   <tbody>
                     {orders.map(order => (
-                      <tr key={getOrderId(order)} className="border-b border-gray-600">
-                        <td className="px-4 py-2 text-gray-300">#{getOrderId(order)}</td>
-                        <td className="px-4 py-2 text-gray-300">{order.customerName}</td>
-                        <td className="px-4 py-2 text-gray-300">{order.totalAmount.toLocaleString()} ₽</td>
+                      <tr key={getOrderId(order)} className="border-b border-gray-200">
+                        <td className="px-4 py-2 text-gray-700">#{getOrderId(order)}</td>
+                        <td className="px-4 py-2 text-gray-700">{order.customerName}</td>
+                        <td className="px-4 py-2 text-gray-700">{order.totalAmount.toLocaleString()} ₽</td>
                         <td className="px-4 py-2">
                           <span className={`px-2 py-1 rounded-full text-xs ${
-                            order.status === 'pending' ? 'bg-yellow-900 text-yellow-300' :
-                            order.status === 'processing' ? 'bg-blue-900 text-blue-300' :
-                            order.status === 'completed' ? 'bg-green-900 text-green-300' :
-                            'bg-red-900 text-red-300'
+                            order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                            order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
+                            order.status === 'completed' ? 'bg-green-100 text-green-800' :
+                            'bg-red-100 text-red-800'
                           }`}>
                             {order.status === 'pending' ? 'Ожидание' :
                              order.status === 'processing' ? 'В обработке' :
                              order.status === 'completed' ? 'Выполнен' : 'Отменен'}
                           </span>
                         </td>
-                        <td className="px-4 py-2 text-gray-300">{order.createdAt}</td>
+                        <td className="px-4 py-2 text-gray-700">{order.createdAt}</td>
                         <td className="px-4 py-2">
-                          <button className="text-blue-400 hover:text-blue-300 mr-2">Подробнее</button>
-                          <button className="text-green-400 hover:text-green-300">Обновить</button>
+                          <button className="text-blue-600 hover:text-blue-700 mr-2">Подробнее</button>
+                          <button className="text-green-600 hover:text-green-700">Обновить</button>
                         </td>
                       </tr>
                     ))}
@@ -926,29 +926,29 @@ export default function AdminPage() {
 
           {activeTab === 'analytics' && (
             <div>
-              <h2 className="text-xl font-semibold mb-6 text-white">Аналитика</h2>
+              <h2 className="text-xl font-semibold mb-6 text-gray-900">Аналитика</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-primary bg-opacity-10 p-6 rounded-lg border border-gray-600">
-                  <h3 className="text-lg font-semibold mb-2 text-white">Общие продажи</h3>
+                <div className="bg-primary bg-opacity-10 p-6 rounded-lg border border-primary/30">
+                  <h3 className="text-lg font-semibold mb-2 text-gray-900">Общие продажи</h3>
                   <p className="text-3xl font-bold text-primary">₽ 450,000</p>
-                  <p className="text-sm text-gray-400">За текущий месяц</p>
+                  <p className="text-sm text-gray-600">За текущий месяц</p>
                 </div>
                 
-                <div className="bg-green-900 bg-opacity-30 p-6 rounded-lg border border-gray-600">
-                  <h3 className="text-lg font-semibold mb-2 text-white">Количество заказов</h3>
-                  <p className="text-3xl font-bold text-green-400">127</p>
-                  <p className="text-sm text-gray-400">За текущий месяц</p>
+                <div className="bg-green-50 p-6 rounded-lg border border-green-300">
+                  <h3 className="text-lg font-semibold mb-2 text-gray-900">Количество заказов</h3>
+                  <p className="text-3xl font-bold text-green-600">127</p>
+                  <p className="text-sm text-gray-600">За текущий месяц</p>
                 </div>
                 
-                <div className="bg-blue-900 bg-opacity-30 p-6 rounded-lg border border-gray-600">
-                  <h3 className="text-lg font-semibold mb-2 text-white">Новые клиенты</h3>
-                  <p className="text-3xl font-bold text-blue-400">23</p>
-                  <p className="text-sm text-gray-400">За текущий месяц</p>
+                <div className="bg-blue-50 p-6 rounded-lg border border-blue-300">
+                  <h3 className="text-lg font-semibold mb-2 text-gray-900">Новые клиенты</h3>
+                  <p className="text-3xl font-bold text-blue-600">23</p>
+                  <p className="text-sm text-gray-600">За текущий месяц</p>
                 </div>
               </div>
               
-              <p className="text-gray-400">Подробная аналитика будет добавлена в следующих версиях.</p>
+              <p className="text-gray-600">Подробная аналитика будет добавлена в следующих версиях.</p>
             </div>
           )}
         </div>
@@ -957,14 +957,14 @@ export default function AdminPage() {
       {/* Product Modal */}
       {showProductModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-gray-700">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-semibold text-white">
+              <h3 className="text-xl font-semibold text-gray-900">
                 {editingProduct ? 'Редактировать товар' : 'Добавить товар'}
               </h3>
               <button 
                 onClick={() => setShowProductModal(false)}
-                className="text-gray-400 hover:text-white"
+                className="text-gray-600 hover:text-gray-900"
               >
                 ✕
               </button>
@@ -972,7 +972,7 @@ export default function AdminPage() {
             
             <form onSubmit={handleProductSubmit} className="space-y-4">
               <div>
-                <label className="block text-gray-300 text-sm font-bold mb-2">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
                   Название товара
                 </label>
                 <input
@@ -980,14 +980,14 @@ export default function AdminPage() {
                   required
                   value={productForm.name}
                   onChange={(e) => setProductForm({...productForm, name: e.target.value})}
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="Например: Мужская футболка базовая"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-gray-300 text-sm font-bold mb-2">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
                     Цена (₽)
                   </label>
                   <input
@@ -996,19 +996,19 @@ export default function AdminPage() {
                     min="0"
                     value={productForm.price}
                     onChange={(e) => setProductForm({...productForm, price: e.target.value})}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="450"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-gray-300 text-sm font-bold mb-2">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
                     Категория
                   </label>
                   <select
                     value={productForm.category}
                     onChange={(e) => setProductForm({...productForm, category: e.target.value})}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="tshirts">Футболки</option>
                     <option value="hoodies">Худи</option>
@@ -1021,20 +1021,20 @@ export default function AdminPage() {
               </div>
 
               <div>
-                <label className="block text-gray-300 text-sm font-bold mb-2">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
                   Материал
                 </label>
                 <input
                   type="text"
                   value={productForm.material}
                   onChange={(e) => setProductForm({...productForm, material: e.target.value})}
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="Хлопок 100%"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-300 text-sm font-bold mb-2">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
                   Изображение товара
                 </label>
                 <div className="space-y-4">
@@ -1042,32 +1042,32 @@ export default function AdminPage() {
                     type="file"
                     accept="image/*"
                     onChange={handleFileSelect}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-black hover:file:bg-yellow-400"
+                    className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-dark"
                   />
                   {imagePreview && (
-                    <div className="relative w-32 h-32 border border-gray-600 rounded-lg overflow-hidden">
-                                              <Image
-                          src={imagePreview}
-                          alt="Превью"
-                          width={128}
-                          height={128}
-                          className="w-full h-full object-cover"
-                          unoptimized
-                          onError={(e) => {
-                            console.log('❌ Preview image load error for:', imagePreview)
-                            e.currentTarget.src = '/assets/catalog/placeholder.svg'
-                          }}
-                        />
+                    <div className="relative w-32 h-32 border border-gray-300 rounded-lg overflow-hidden">
+                      <Image
+                        src={imagePreview}
+                        alt="Превью"
+                        width={128}
+                        height={128}
+                        className="w-full h-full object-cover"
+                        unoptimized
+                        onError={(e) => {
+                          console.log('❌ Preview image load error for:', imagePreview)
+                          e.currentTarget.src = '/assets/catalog/placeholder.svg'
+                        }}
+                      />
                     </div>
                   )}
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-gray-500">
                     Поддерживаемые форматы: JPG, PNG, GIF, WebP. Максимальный размер: 5MB
                   </p>
                 </div>
               </div>
 
               <div>
-                <label className="block text-gray-300 text-sm font-bold mb-2">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
                   Описание
                 </label>
                 <textarea
@@ -1075,33 +1075,33 @@ export default function AdminPage() {
                   rows={3}
                   value={productForm.description}
                   onChange={(e) => setProductForm({...productForm, description: e.target.value})}
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
                   placeholder="Описание товара..."
                 ></textarea>
               </div>
 
               <div>
-                <label className="block text-gray-300 text-sm font-bold mb-2">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
                   Цвета (через запятую)
                 </label>
                 <input
                   type="text"
                   value={productForm.colors}
                   onChange={(e) => setProductForm({...productForm, colors: e.target.value})}
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="Белый, Черный, Серый"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-300 text-sm font-bold mb-2">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
                   Размеры (через запятую)
                 </label>
                 <input
                   type="text"
                   value={productForm.sizes}
                   onChange={(e) => setProductForm({...productForm, sizes: e.target.value})}
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="XS, S, M, L, XL"
                 />
               </div>
@@ -1110,7 +1110,7 @@ export default function AdminPage() {
                 <button
                   type="submit"
                   disabled={uploading}
-                  className="flex-1 bg-primary text-black font-bold py-3 px-4 rounded-lg hover:bg-yellow-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  className="flex-1 bg-primary text-white font-bold py-3 px-4 rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 >
                   {uploading ? (
                     <>

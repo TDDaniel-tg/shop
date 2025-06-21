@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
+import Image from 'next/image'
 
 interface QuickProductFormProps {
   onSubmit: (productData: any) => void
@@ -40,7 +41,8 @@ export default function QuickProductForm({ onSubmit, loading }: QuickProductForm
     material: 'Хлопок 100%',
     colors: '',
     sizes: '',
-    template: ''
+    template: '',
+    image: ''
   })
 
   const handleTemplateSelect = (templateKey: string) => {
@@ -65,152 +67,206 @@ export default function QuickProductForm({ onSubmit, loading }: QuickProductForm
       material: formData.material,
       colors: formData.colors.split(',').map(c => c.trim()).filter(c => c),
       sizes: formData.sizes.split(',').map(s => s.trim()).filter(s => s),
-      image: '/assets/catalog/placeholder.svg'
+      image: formData.image
     }
     
     onSubmit(productData)
   }
 
+  const fileInputRef = React.useRef<HTMLInputElement>(null)
+  const [isDragging, setIsDragging] = useState(false)
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    setIsDragging(false)
+    const files = e.dataTransfer.files
+    if (files.length > 0) {
+      const file = files[0]
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setFormData(prev => ({ ...prev, image: reader.result as string }))
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    setIsDragging(false)
+  }
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (files && files.length > 0) {
+      const file = files[0]
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setFormData(prev => ({ ...prev, image: reader.result as string }))
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
   return (
-    <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-      <h3 className="text-xl font-semibold text-white mb-4">⚡ Быстрое добавление товара</h3>
+    <div className="bg-gray-100 p-6 rounded-lg border border-gray-200">
+      <h3 className="text-lg font-semibold mb-4 text-gray-900">Быстрое добавление товара</h3>
       
-      {/* Шаблоны товаров */}
-      <div className="mb-6">
-        <label className="block text-gray-300 text-sm font-bold mb-2">
-          Выберите шаблон (необязательно)
-        </label>
-        <div className="grid grid-cols-3 gap-2">
-          <button
-            type="button"
-            onClick={() => handleTemplateSelect('tshirt')}
-            className={`p-3 rounded-lg border transition-colors ${
-              formData.template === 'tshirt' 
-                ? 'border-primary bg-yellow-400 bg-opacity-20 text-primary' 
-                : 'border-gray-600 text-gray-300 hover:border-gray-500'
-            }`}
-          >
-            👕 Футболка
-          </button>
-          <button
-            type="button"
-            onClick={() => handleTemplateSelect('hoodie')}
-            className={`p-3 rounded-lg border transition-colors ${
-              formData.template === 'hoodie' 
-                ? 'border-primary bg-yellow-400 bg-opacity-20 text-primary' 
-                : 'border-gray-600 text-gray-300 hover:border-gray-500'
-            }`}
-          >
-            🧥 Худи
-          </button>
-          <button
-            type="button"
-            onClick={() => handleTemplateSelect('cap')}
-            className={`p-3 rounded-lg border transition-colors ${
-              formData.template === 'cap' 
-                ? 'border-primary bg-yellow-400 bg-opacity-20 text-primary' 
-                : 'border-gray-600 text-gray-300 hover:border-gray-500'
-            }`}
-          >
-            🧢 Кепка
-          </button>
+      {/* Область перетаскивания */}
+      <div className="mb-4">
+        <div
+          className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+            isDragging 
+              ? 'border-primary bg-primary/10' 
+              : 'border-gray-300 bg-gray-50 hover:border-gray-400'
+          }`}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+        >
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileSelect}
+            accept="image/*"
+            className="hidden"
+          />
+          
+          {formData.image ? (
+            <div className="space-y-4">
+              <div className="relative w-32 h-32 mx-auto rounded-lg overflow-hidden">
+                <Image
+                  src={formData.image}
+                  alt="Превью"
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData(prev => ({ ...prev, image: '' }))
+                  if (fileInputRef.current) fileInputRef.current.value = ''
+                }}
+                className="text-red-600 hover:text-red-700 text-sm"
+              >
+                Удалить изображение
+              </button>
+            </div>
+          ) : (
+            <>
+              <svg className="w-12 h-12 mx-auto text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+              <p className="text-gray-600 mb-2">Перетащите изображение сюда или</p>
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="text-primary hover:text-primary-dark font-medium"
+              >
+                выберите файл
+              </button>
+            </>
+          )}
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Основные поля */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-gray-300 text-sm font-bold mb-2">
-              Название*
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.name}
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="Название товара"
-            />
-          </div>
-          
-          <div>
-            <label className="block text-gray-300 text-sm font-bold mb-2">
-              Цена (₽)*
-            </label>
-            <input
-              type="number"
-              required
-              min="0"
-              value={formData.price}
-              onChange={(e) => setFormData({...formData, price: e.target.value})}
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="450"
-            />
-          </div>
-        </div>
-
-        {/* Предзаполненные поля */}
+      {/* Поля формы в 2 колонки */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-gray-300 text-sm font-bold mb-2">
-            Описание
+          <label className="block text-gray-700 text-sm font-medium mb-1">
+            Название *
           </label>
-          <textarea
-            rows={2}
-            value={formData.description}
-            onChange={(e) => setFormData({...formData, description: e.target.value})}
-            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-            placeholder="Описание товара..."
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={(e) => setFormData({...formData, name: e.target.value})}
+            required
+            className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            placeholder="Например: Футболка базовая"
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-gray-300 text-sm font-bold mb-2">
-              Цвета
-            </label>
-            <input
-              type="text"
-              value={formData.colors}
-              onChange={(e) => setFormData({...formData, colors: e.target.value})}
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="Белый, Черный, Серый"
-            />
-          </div>
-          
-          <div>
-            <label className="block text-gray-300 text-sm font-bold mb-2">
-              Размеры
-            </label>
-            <input
-              type="text"
-              value={formData.sizes}
-              onChange={(e) => setFormData({...formData, sizes: e.target.value})}
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="XS, S, M, L, XL"
-            />
-          </div>
+        <div>
+          <label className="block text-gray-700 text-sm font-medium mb-1">
+            Цена (₽) *
+          </label>
+          <input
+            type="number"
+            name="price"
+            value={formData.price}
+            onChange={(e) => setFormData({...formData, price: e.target.value})}
+            required
+            min="0"
+            className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            placeholder="450"
+          />
         </div>
+      </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-primary text-black font-bold py-3 px-4 rounded-lg hover:bg-yellow-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-        >
-          {loading ? (
-            <>
-              <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin mr-2"></div>
-              Добавление...
-            </>
-          ) : (
-            '⚡ Быстро добавить товар'
-          )}
-        </button>
-      </form>
-      
-      <p className="text-sm text-gray-400 mt-4">
-        💡 Товар будет создан с изображением-заглушкой. Вы сможете загрузить фото позже через редактирование.
-      </p>
+      <div>
+        <label className="block text-gray-700 text-sm font-medium mb-1">
+          Описание *
+        </label>
+        <textarea
+          name="description"
+          value={formData.description}
+          onChange={(e) => setFormData({...formData, description: e.target.value})}
+          required
+          rows={2}
+          className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+          placeholder="Краткое описание товара..."
+        />
+      </div>
+
+      <div>
+        <label className="block text-gray-700 text-sm font-medium mb-1">
+          Размеры (через запятую)
+        </label>
+        <input
+          type="text"
+          name="sizes"
+          value={formData.sizes}
+          onChange={(e) => setFormData({...formData, sizes: e.target.value})}
+          className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="S, M, L, XL"
+        />
+      </div>
+
+      <div>
+        <label className="block text-gray-700 text-sm font-medium mb-1">
+          Цвета (через запятую)
+        </label>
+        <input
+          type="text"
+          name="colors"
+          value={formData.colors}
+          onChange={(e) => setFormData({...formData, colors: e.target.value})}
+          className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="Белый, Черный, Серый"
+        />
+      </div>
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full bg-primary text-white font-medium py-3 rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+      >
+        {loading ? (
+          <>
+            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+            Добавление...
+          </>
+        ) : (
+          '+ Добавить товар'
+        )}
+      </button>
     </div>
   )
 } 

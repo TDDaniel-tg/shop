@@ -118,11 +118,11 @@ export default function Contacts() {
   ]
 
   return (
-    <section id="contacts" className="section bg-gray-50">
+    <section id="contacts" className="section bg-gray-50 dark:bg-gray-800">
       <div className="container">
         <div className="text-center mb-12">
-          <h2 className="text-gray-900 mb-4">Контакты</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <h2 className="text-gray-900 dark:text-white mb-4">Контакты</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Свяжитесь с нами любым удобным способом или оставьте заявку
           </p>
         </div>
@@ -131,7 +131,7 @@ export default function Contacts() {
           {/* Contact Form */}
           <div className="slide-in-left">
             <div className="card">
-              <h3 className="text-2xl font-semibold text-gray-900 mb-6">
+              <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
                 Оставьте заявку
               </h3>
               

@@ -62,7 +62,7 @@ export default function Hero() {
   }
 
   return (
-    <section id="hero" className="section pt-24 lg:pt-32 bg-gradient-to-br from-gray-50 to-white">
+    <section id="hero" className="section pt-24 lg:pt-32 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Column - Content */}
@@ -71,10 +71,10 @@ export default function Hero() {
               <span className="badge badge-primary mb-4 inline-block">
                 Производство с 2015 года
               </span>
-              <h1 className="text-gray-900 mb-6">
+              <h1 className="text-gray-900 dark:text-white mb-6">
                 Оптовые поставки футболок от производителя
               </h1>
-              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+              <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
                 Собственное производство качественных футболок для маркетплейсов, 
                 корпоративных заказов и мерча. Работаем с заказами от 50 штук.
               </p>
@@ -87,8 +87,8 @@ export default function Hero() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                 </svg>
                 <div>
-                  <h4 className="font-semibold text-gray-900">Собственное производство</h4>
-                  <p className="text-sm text-gray-600">Полный цикл от ткани до готового изделия</p>
+                  <h4 className="font-semibold text-gray-900 dark:text-white">Собственное производство</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">Полный цикл от ткани до готового изделия</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
@@ -96,8 +96,8 @@ export default function Hero() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                 </svg>
                 <div>
-                  <h4 className="font-semibold text-gray-900">От 50 штук</h4>
-                  <p className="text-sm text-gray-600">Минимальный заказ всего 50 единиц</p>
+                  <h4 className="font-semibold text-gray-900 dark:text-white">От 50 штук</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">Минимальный заказ всего 50 единиц</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
@@ -105,8 +105,8 @@ export default function Hero() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                 </svg>
                 <div>
-                  <h4 className="font-semibold text-gray-900">Доставка по России</h4>
-                  <p className="text-sm text-gray-600">Отправка в любой регион страны</p>
+                  <h4 className="font-semibold text-gray-900 dark:text-white">Доставка по России</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">Отправка в любой регион страны</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
@@ -114,8 +114,8 @@ export default function Hero() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                 </svg>
                 <div>
-                  <h4 className="font-semibold text-gray-900">Гарантия качества</h4>
-                  <p className="text-sm text-gray-600">100% хлопок, плотность от 160 г/м²</p>
+                  <h4 className="font-semibold text-gray-900 dark:text-white">Гарантия качества</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">100% хлопок, плотность от 160 г/м²</p>
                 </div>
               </div>
             </div>
@@ -123,7 +123,7 @@ export default function Hero() {
             {/* Contact Form */}
             <div className="card card-lg max-w-md">
               <form onSubmit={handleSubmit}>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                   Получите каталог с актуальными ценами
                 </h3>
                 
@@ -174,7 +174,7 @@ export default function Hero() {
                       disabled={isSubmitting}
                       required
                     />
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-gray-600 dark:text-gray-300">
                       Даю согласие на обработку персональных данных в соответствии с{' '}
                       <a href="/privacy" className="text-primary hover:underline">
                         политикой конфиденциальности
